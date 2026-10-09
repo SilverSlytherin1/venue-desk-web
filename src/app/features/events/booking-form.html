@@ -1,0 +1,30 @@
+<form [formGroup]="form" appValidatedForm (validSubmit)="submit()">
+  <app-form-field label="Full name" [control]="form.controls.name">
+    <input appFieldControl formControlName="name" type="text" autocomplete="name" />
+  </app-form-field>
+
+  <app-form-field label="Email" [control]="form.controls.email">
+    <input appFieldControl formControlName="email" type="email" autocomplete="email" />
+  </app-form-field>
+
+  <app-form-field label="Seats" [control]="form.controls.seats" [hint]="seatsHint()">
+    <input
+      appFieldControl
+      formControlName="seats"
+      class="seats"
+      type="number"
+      inputmode="numeric"
+      step="1"
+      min="1"
+      [attr.max]="maxSeats()"
+    />
+  </app-form-field>
+
+  <button type="submit" class="button button--primary" [disabled]="submitting()">
+    @if (submitting()) {
+      Booking…
+    } @else {
+      Book seats
+    }
+  </button>
+</form>

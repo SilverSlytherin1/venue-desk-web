@@ -1,0 +1,109 @@
+// Native controls styled once. Buttons and links share `.button` so a navigation that looks like
+// an action stays a real anchor.
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-border-control);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--duration-fast);
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background: var(--color-surface-sunken);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+}
+
+.button--primary {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      border-color: var(--color-accent-hover);
+      background: var(--color-accent-hover);
+    }
+  }
+}
+
+.button--danger {
+  border-color: var(--color-danger);
+  background: var(--color-danger);
+  color: var(--color-on-danger);
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      border-color: var(--color-danger-hover);
+      background: var(--color-danger-hover);
+    }
+  }
+}
+
+.button--quiet {
+  border-color: transparent;
+  background: transparent;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  height: var(--control-height);
+  padding: 0 var(--space-3);
+  border: 1px solid var(--color-border-control);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  // 16px keeps iOS from zooming the page when a field takes focus.
+  font: inherit;
+
+  &[aria-invalid='true'] {
+    border-color: var(--color-danger);
+    box-shadow: inset 0 0 0 1px var(--color-danger);
+  }
+}
+
+textarea {
+  height: auto;
+  min-height: calc(var(--control-height) * 3);
+  padding-block: var(--space-2);
+  resize: vertical;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+
+  &::before {
+    content: '\2190';
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

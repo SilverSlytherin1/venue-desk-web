@@ -1,0 +1,50 @@
+{
+  "items": [
+    {
+      "id": "c4d5e6f7-a8b9-4c0d-9e1f-2a3b4c5d6e07",
+      "number": "WO-0005",
+      "title": "Order microphones for Open Mic",
+      "description": "Two handheld wireless sets plus spare batteries.",
+      "priority": "MEDIUM",
+      "status": "OPEN",
+      "event": {
+        "id": "5c2d9a44-1b7e-4f0e-8a3c-7d6e5f4a3b02",
+        "title": "Open Mic Poetry"
+      },
+      "assignee": {
+        "id": "7a6b5c4d-3e2f-4a1b-8c9d-0e1f2a3b4c05",
+        "name": "Sam Staff"
+      },
+      "createdBy": {
+        "id": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c06",
+        "name": "Alex Admin"
+      },
+      "createdAt": "2030-10-05T09:30:00.000Z",
+      "updatedAt": "2030-10-07T14:05:00.000Z",
+      "allowedTransitions": ["IN_PROGRESS"]
+    },
+    {
+      "id": "d5e6f7a8-b9c0-4d1e-8f2a-3b4c5d6e7f08",
+      "number": "WO-0003",
+      "title": "Print seating plan",
+      "description": "A3, two copies for the ushers and one for front of house.",
+      "priority": "LOW",
+      "status": "OPEN",
+      "event": {
+        "id": "0b1f7c1e-6f0a-4d58-9d7b-2f1c6a4e9a01",
+        "title": "Jazz Night with the Blue Quartet"
+      },
+      "assignee": null,
+      "createdBy": {
+        "id": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c06",
+        "name": "Alex Admin"
+      },
+      "createdAt": "2030-10-03T09:30:00.000Z",
+      "updatedAt": "2030-10-05T14:05:00.000Z",
+      "allowedTransitions": []
+    }
+  ],
+  "page": 1,
+  "pageSize": 10,
+  "total": 2
+}

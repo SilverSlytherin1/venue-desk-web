@@ -1,0 +1,23 @@
+{
+  "id": "e6f7a8b9-c0d1-4e2f-8a3b-4c5d6e7f8a09",
+  "number": "WO-0015",
+  "title": "Tune the grand piano",
+  "description": "Book the tuner for the morning.",
+  "priority": "HIGH",
+  "status": "OPEN",
+  "event": {
+    "id": "0b1f7c1e-6f0a-4d58-9d7b-2f1c6a4e9a01",
+    "title": "Jazz Night with the Blue Quartet"
+  },
+  "assignee": {
+    "id": "8b7c6d5e-4f3a-4b2c-9d1e-0f1a2b3c4d0a",
+    "name": "Robin Staff"
+  },
+  "createdBy": {
+    "id": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c06",
+    "name": "Alex Admin"
+  },
+  "createdAt": "2030-10-09T08:30:00.000Z",
+  "updatedAt": "2030-10-09T08:30:00.000Z",
+  "allowedTransitions": ["IN_PROGRESS", "CANCELLED"]
+}

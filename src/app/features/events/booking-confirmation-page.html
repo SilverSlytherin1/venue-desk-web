@@ -1,0 +1,35 @@
+<h1>Booking confirmed</h1>
+
+<div class="reference">
+  <dl>
+    <dt class="muted">Your booking reference</dt>
+    <dd class="code">{{ booking().reference }}</dd>
+  </dl>
+  <p>{{ seats() }} booked for {{ booking().name }} ({{ booking().email }}).</p>
+  <p class="muted">Keep the reference: the venue will ask for it if you contact them.</p>
+</div>
+
+@let state = event.state();
+@switch (state.status) {
+  @case ('loading') {
+    <app-skeleton label="Loading event details" [lines]="1" />
+  }
+  @case ('error') {
+    <app-error-state
+      heading="Your booking is confirmed, but the event details could not be loaded"
+      [problem]="state.problem"
+      (retry)="event.reload()"
+    />
+  }
+  @case ('ready') {
+    <section aria-labelledby="event-heading">
+      <h2 id="event-heading">{{ state.value.title }}</h2>
+      <p class="muted">
+        <time [attr.datetime]="state.value.startsAt">{{ state.value.startsAt | date }}</time
+        >, {{ state.value.venue }}
+      </p>
+    </section>
+  }
+}
+
+<a class="button" routerLink="/events">Back to all events</a>

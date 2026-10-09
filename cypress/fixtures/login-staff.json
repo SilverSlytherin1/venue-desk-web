@@ -1,0 +1,10 @@
+{
+  "accessToken": "e2e-staff-token",
+  "expiresIn": 3600,
+  "user": {
+    "id": "7a6b5c4d-3e2f-4a1b-8c9d-0e1f2a3b4c05",
+    "name": "Sam Staff",
+    "email": "sam@venuedesk.test",
+    "role": "STAFF"
+  }
+}

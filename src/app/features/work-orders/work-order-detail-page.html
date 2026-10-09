@@ -1,0 +1,77 @@
+<a class="back-link" routerLink="..">All work orders</a>
+<h1>{{ heading() }}</h1>
+
+@let state = workOrder.state();
+@switch (state.status) {
+  @case ('loading') {
+    <app-skeleton label="Loading work order" />
+  }
+  @case ('error') {
+    <app-error-state
+      heading="This work order could not be loaded"
+      [problem]="state.problem"
+      (retry)="workOrder.reload()"
+    />
+  }
+  @case ('ready') {
+    @let status = statuses[state.value.status];
+    @let priority = priorities[state.value.priority];
+    <p class="summary">
+      <span class="number">{{ state.value.number }}</span>
+      <app-badge [tone]="status.tone">{{ status.label }}</app-badge>
+      <app-badge [tone]="priority.tone">{{ priority.label }}</app-badge>
+    </p>
+
+    @if (feedback(); as feedback) {
+      <app-alert #feedbackElement tabindex="-1" [tone]="feedback.tone" [live]="false">
+        {{ feedback.message }}
+      </app-alert>
+    }
+
+    <section class="panel" aria-labelledby="actions-heading">
+      <h2 id="actions-heading">Next steps</h2>
+      <app-work-order-actions
+        [workOrder]="state.value"
+        [busy]="transitioning()"
+        (transition)="transition($event)"
+      />
+    </section>
+
+    <section class="panel" aria-labelledby="details-heading">
+      <h2 id="details-heading">Details</h2>
+      <p class="description">{{ state.value.description }}</p>
+      <dl>
+        <div>
+          <dt>Event</dt>
+          <dd>
+            @if (state.value.event; as event) {
+              <a [routerLink]="['/events', event.id]">{{ event.title }}</a>
+            } @else {
+              Not linked to an event
+            }
+          </dd>
+        </div>
+        <div>
+          <dt>Assignee</dt>
+          <dd>{{ state.value.assignee?.name ?? 'Unassigned' }}</dd>
+        </div>
+        <div>
+          <dt>Created by</dt>
+          <dd>{{ state.value.createdBy.name }}</dd>
+        </div>
+        <div>
+          <dt>Created</dt>
+          <dd>
+            <time [attr.datetime]="state.value.createdAt">{{ state.value.createdAt | date }}</time>
+          </dd>
+        </div>
+        <div>
+          <dt>Last updated</dt>
+          <dd>
+            <time [attr.datetime]="state.value.updatedAt">{{ state.value.updatedAt | date }}</time>
+          </dd>
+        </div>
+      </dl>
+    </section>
+  }
+}

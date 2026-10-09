@@ -1,0 +1,48 @@
+<!--
+  Every role below repeats what the element already is. They are needed because, in a narrow
+  container, work-order-table.scss sets `display: block` or `display: grid` on the table, tbody,
+  tr, th and td to turn each row into a card, and an element whose `display` is no longer a table
+  value loses its table semantics in some browsers unless the role is stated.
+-->
+<table role="table">
+  <caption class="visually-hidden">
+    Work orders
+  </caption>
+  <thead role="rowgroup">
+    <tr role="row">
+      <th role="columnheader" scope="col">Work order</th>
+      <th role="columnheader" scope="col">Status</th>
+      <th role="columnheader" scope="col">Priority</th>
+      <th role="columnheader" scope="col">Assignee</th>
+      <th role="columnheader" scope="col">Updated</th>
+    </tr>
+  </thead>
+  <tbody role="rowgroup">
+    @for (workOrder of workOrders(); track workOrder.id) {
+      @let status = statuses[workOrder.status];
+      @let priority = priorities[workOrder.priority];
+      <tr role="row">
+        <th role="rowheader" scope="row">
+          <a [routerLink]="[workOrder.id]">
+            <span class="number">{{ workOrder.number }}</span>
+            {{ workOrder.title }}
+          </a>
+        </th>
+        <td role="cell" data-label="Status">
+          <app-badge [tone]="status.tone">{{ status.label }}</app-badge>
+        </td>
+        <td role="cell" data-label="Priority">
+          <app-badge [tone]="priority.tone">{{ priority.label }}</app-badge>
+        </td>
+        <td role="cell" data-label="Assignee">
+          {{ workOrder.assignee?.name ?? 'Unassigned' }}
+        </td>
+        <td role="cell" data-label="Updated">
+          <time [attr.datetime]="workOrder.updatedAt">{{
+            workOrder.updatedAt | date: 'd MMM y'
+          }}</time>
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

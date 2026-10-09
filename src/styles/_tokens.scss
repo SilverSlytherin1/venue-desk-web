@@ -1,0 +1,155 @@
+// Two tiers. Primitives name what a value is; semantic tokens name what it is for.
+// Components reference semantic tokens only, so a theme is a remapping in this file.
+
+:root {
+  color-scheme: light dark;
+
+  // Primitive: neutrals
+  --gray-0: #ffffff;
+  --gray-50: #f6f7f9;
+  --gray-100: #eceef2;
+  --gray-200: #dde1e8;
+  --gray-300: #c3c9d4;
+  --gray-400: #98a1b0;
+  --gray-500: #687182;
+  --gray-600: #4b5463;
+  --gray-700: #353c48;
+  --gray-800: #232831;
+  --gray-900: #171b22;
+  --gray-950: #0f1217;
+
+  // Primitive: accent
+  --indigo-100: #e5e8fb;
+  --indigo-200: #c8cff7;
+  --indigo-300: #a4aff1;
+  --indigo-600: #4350c8;
+  --indigo-700: #3540a6;
+  --indigo-800: #2a3384;
+  --indigo-900: #20275f;
+
+  // Primitive: status hues
+  --green-100: #daf3e2;
+  --green-200: #b1e5c2;
+  --green-800: #17603a;
+  --green-900: #103f27;
+  --amber-100: #fbeecb;
+  --amber-200: #f5d98d;
+  --amber-800: #774808;
+  --amber-900: #4b2f08;
+  --red-100: #fbe2e0;
+  --red-200: #f6c1bc;
+  --red-300: #f09d96;
+  --red-700: #ab2a23;
+  --red-800: #8c211c;
+  --red-900: #57130f;
+
+  // Primitive: scales
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-bold: 650;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-full: 999px;
+
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Menlo, Consolas, monospace;
+
+  --duration-fast: 120ms;
+
+  // Semantic: layout
+  --page-width: 68rem;
+  --form-width: 30rem;
+  --measure: 65ch;
+  --control-height: 2.5rem;
+
+  // Semantic: colour, light theme
+  --color-canvas: var(--gray-50);
+  --color-surface: var(--gray-0);
+  --color-surface-sunken: var(--gray-100);
+  --color-text: var(--gray-900);
+  --color-text-muted: var(--gray-600);
+  --color-border: var(--gray-200);
+  --color-border-control: var(--gray-500);
+  --color-accent: var(--indigo-600);
+  --color-accent-hover: var(--indigo-700);
+  --color-on-accent: var(--gray-0);
+  --color-link: var(--indigo-700);
+  --color-focus: var(--indigo-600);
+  --color-danger: var(--red-700);
+  --color-danger-hover: var(--red-800);
+  --color-on-danger: var(--gray-0);
+
+  --tone-neutral-bg: var(--gray-100);
+  --tone-neutral-fg: var(--gray-700);
+  --tone-info-bg: var(--indigo-100);
+  --tone-info-fg: var(--indigo-800);
+  --tone-success-bg: var(--green-100);
+  --tone-success-fg: var(--green-800);
+  --tone-warning-bg: var(--amber-100);
+  --tone-warning-fg: var(--amber-800);
+  --tone-danger-bg: var(--red-100);
+  --tone-danger-fg: var(--red-800);
+}
+
+// Fingers need a larger target than a mouse pointer does.
+@media (pointer: coarse) {
+  :root {
+    --control-height: 2.75rem;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-canvas: var(--gray-950);
+    --color-surface: var(--gray-900);
+    --color-surface-sunken: var(--gray-800);
+    --color-text: var(--gray-100);
+    --color-text-muted: var(--gray-400);
+    --color-border: var(--gray-700);
+    --color-border-control: var(--gray-400);
+    --color-accent: var(--indigo-300);
+    --color-accent-hover: var(--indigo-200);
+    --color-on-accent: var(--gray-950);
+    --color-link: var(--indigo-300);
+    --color-focus: var(--indigo-300);
+    --color-danger: var(--red-300);
+    --color-danger-hover: var(--red-200);
+    --color-on-danger: var(--gray-950);
+
+    --tone-neutral-bg: var(--gray-800);
+    --tone-neutral-fg: var(--gray-200);
+    --tone-info-bg: var(--indigo-900);
+    --tone-info-fg: var(--indigo-200);
+    --tone-success-bg: var(--green-900);
+    --tone-success-fg: var(--green-200);
+    --tone-warning-bg: var(--amber-900);
+    --tone-warning-fg: var(--amber-200);
+    --tone-danger-bg: var(--red-900);
+    --tone-danger-fg: var(--red-200);
+  }
+}
+
+// A component picks a tone with a `data-tone` attribute and reads it through two generic tokens.
+@each $tone in neutral, info, success, warning, danger {
+  [data-tone='#{$tone}'] {
+    --tone-bg: var(--tone-#{$tone}-bg);
+    --tone-fg: var(--tone-#{$tone}-fg);
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "https://venue-desk.dev/problems/event-sold-out",
+  "title": "Event sold out",
+  "status": 409,
+  "code": "EVENT_SOLD_OUT",
+  "detail": "Only 1 seat left, 3 requested.",
+  "instance": "/api/v1/events/0b1f7c1e-6f0a-4d58-9d7b-2f1c6a4e9a01/bookings",
+  "seatsLeft": 1
+}

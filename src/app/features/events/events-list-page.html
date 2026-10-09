@@ -1,0 +1,37 @@
+<header class="page-header">
+  <h1>Upcoming events</h1>
+  <p class="muted">Pick an event to book up to four seats. No account needed.</p>
+</header>
+
+@let state = events.state();
+@switch (state.status) {
+  @case ('loading') {
+    <app-skeleton label="Loading events" />
+  }
+  @case ('error') {
+    <app-error-state
+      heading="The events could not be loaded"
+      [problem]="state.problem"
+      (retry)="events.reload()"
+    />
+  }
+  @case ('ready') {
+    @if (state.value.total === 0) {
+      <app-empty-state heading="No upcoming events">
+        <p>Nothing is scheduled right now. New dates appear here as soon as they are announced.</p>
+      </app-empty-state>
+    } @else {
+      <ul class="cards">
+        @for (event of state.value.items; track event.id) {
+          <li><app-event-card [event]="event" /></li>
+        }
+      </ul>
+      <app-pagination
+        [page]="state.value.page"
+        [pageSize]="pageSize"
+        [total]="state.value.total"
+        (pageChange)="goToPage($event)"
+      />
+    }
+  }
+}

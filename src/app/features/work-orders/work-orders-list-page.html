@@ -1,0 +1,57 @@
+<header class="page-header">
+  <h1>Work orders</h1>
+  @if (isAdmin()) {
+    <a class="button button--primary" routerLink="new">New work order</a>
+  }
+</header>
+
+@if (wasRefused) {
+  <app-alert tone="warning">
+    That page is for admins only, so you were brought back to the work orders.
+  </app-alert>
+}
+
+<app-work-order-filters
+  [status]="status()"
+  [query]="q()"
+  (statusChange)="filterByStatus($event)"
+  (queryChange)="search($event)"
+  (cleared)="clearFilters()"
+/>
+
+<p class="visually-hidden" role="status">{{ announcement() }}</p>
+
+@let state = workOrders.state();
+@switch (state.status) {
+  @case ('loading') {
+    <app-skeleton label="Loading work orders" [lines]="5" />
+  }
+  @case ('error') {
+    <app-error-state
+      heading="The work orders could not be loaded"
+      [problem]="state.problem"
+      (retry)="workOrders.reload()"
+    />
+  }
+  @case ('ready') {
+    @if (state.value.total > 0) {
+      @if (state.value.items.length > 0) {
+        <app-work-order-table [workOrders]="state.value.items" />
+      }
+      <app-pagination
+        [page]="state.value.page"
+        [pageSize]="pageSize"
+        [total]="state.value.total"
+        (pageChange)="goToPage($event)"
+      />
+    } @else if (isFiltered()) {
+      <app-empty-state heading="No work orders match these filters">
+        <p>Try a different search or status, or clear the filters to see everything.</p>
+      </app-empty-state>
+    } @else {
+      <app-empty-state heading="No work orders yet">
+        <p>Work orders track what has to be prepared before an event. An admin creates them.</p>
+      </app-empty-state>
+    }
+  }
+}

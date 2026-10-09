@@ -1,0 +1,81 @@
+<a class="back-link" routerLink="..">All work orders</a>
+<h1>New work order</h1>
+
+<form [formGroup]="form" appValidatedForm (validSubmit)="create()">
+  @if (failure(); as failure) {
+    <app-alert tone="danger">{{ failure }}</app-alert>
+  }
+
+  <app-form-field label="Title" [control]="form.controls.title">
+    <input appFieldControl formControlName="title" type="text" autocomplete="off" />
+  </app-form-field>
+
+  <app-form-field
+    label="Description"
+    hint="What has to be done, and anything the assignee needs to know."
+    [control]="form.controls.description"
+  >
+    <textarea appFieldControl formControlName="description" rows="5"></textarea>
+  </app-form-field>
+
+  <app-form-field label="Priority" [control]="form.controls.priority">
+    <select appFieldControl formControlName="priority">
+      @for (priority of priorities; track priority) {
+        <option [value]="priority">{{ priorityLabels[priority].label }}</option>
+      }
+    </select>
+  </app-form-field>
+
+  @let eventOptions = events.state();
+  <app-form-field label="Event" [control]="form.controls.eventId" [hint]="eventsHint()">
+    <select appFieldControl formControlName="eventId">
+      <option value="">Not linked to an event</option>
+      @if (eventOptions.status === 'ready') {
+        @for (event of eventOptions.value.items; track event.id) {
+          <option [value]="event.id">
+            {{ event.title }}, {{ event.startsAt | date: 'd MMM y' }}
+          </option>
+        }
+      }
+    </select>
+  </app-form-field>
+  @if (eventOptions.status === 'error') {
+    <app-alert tone="warning">
+      <p>The events could not be loaded, so none can be linked right now.</p>
+      <button type="button" class="button" (click)="events.reload()">Load events again</button>
+    </app-alert>
+  }
+
+  @let userOptions = users.state();
+  <app-form-field
+    label="Assignee"
+    [control]="form.controls.assigneeId"
+    [hint]="userOptions.status === 'loading' ? 'Loading people…' : undefined"
+  >
+    <select appFieldControl formControlName="assigneeId">
+      <option value="">Unassigned</option>
+      @if (userOptions.status === 'ready') {
+        @for (user of userOptions.value; track user.id) {
+          <option [value]="user.id">{{ user.name }}</option>
+        }
+      }
+    </select>
+  </app-form-field>
+  @if (userOptions.status === 'error') {
+    <app-alert tone="warning">
+      <p>The list of people could not be loaded, so nobody can be assigned right now.</p>
+      <button type="button" class="button" (click)="users.reload()">Load people again</button>
+    </app-alert>
+  }
+
+  <div class="actions">
+    <button type="submit" class="button button--primary" [disabled]="submitting()">
+      @if (submitting()) {
+        Creating…
+      } @else {
+        Create work order
+      }
+    </button>
+    <a class="button button--quiet" routerLink="..">Cancel</a>
+  </div>
+</form>

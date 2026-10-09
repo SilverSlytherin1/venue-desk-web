@@ -1,0 +1,32 @@
+<h1>Staff sign in</h1>
+
+@if (failure(); as failure) {
+  <app-alert tone="danger">{{ failure }}</app-alert>
+} @else if (reason() === 'expired') {
+  <app-alert tone="info"
+    >Your session has ended. Sign in again to pick up where you were.</app-alert
+  >
+}
+
+<form [formGroup]="form" appValidatedForm (validSubmit)="signIn()">
+  <app-form-field label="Email" [control]="form.controls.email">
+    <input appFieldControl formControlName="email" type="email" autocomplete="username" />
+  </app-form-field>
+
+  <app-form-field label="Password" [control]="form.controls.password">
+    <input
+      appFieldControl
+      formControlName="password"
+      type="password"
+      autocomplete="current-password"
+    />
+  </app-form-field>
+
+  <button type="submit" class="button button--primary" [disabled]="submitting()">
+    @if (submitting()) {
+      Signing in…
+    } @else {
+      Sign in
+    }
+  </button>
+</form>

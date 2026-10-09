@@ -1,0 +1,23 @@
+{
+  "id": "c4d5e6f7-a8b9-4c0d-9e1f-2a3b4c5d6e07",
+  "number": "WO-0005",
+  "title": "Order microphones for Open Mic",
+  "description": "Two handheld wireless sets plus spare batteries.",
+  "priority": "MEDIUM",
+  "status": "IN_PROGRESS",
+  "event": {
+    "id": "5c2d9a44-1b7e-4f0e-8a3c-7d6e5f4a3b02",
+    "title": "Open Mic Poetry"
+  },
+  "assignee": {
+    "id": "7a6b5c4d-3e2f-4a1b-8c9d-0e1f2a3b4c05",
+    "name": "Sam Staff"
+  },
+  "createdBy": {
+    "id": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c06",
+    "name": "Alex Admin"
+  },
+  "createdAt": "2030-10-05T09:30:00.000Z",
+  "updatedAt": "2030-10-09T08:30:00.000Z",
+  "allowedTransitions": ["DONE", "OPEN"]
+}

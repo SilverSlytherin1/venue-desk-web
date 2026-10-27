@@ -28,8 +28,8 @@ describe('EventDetailPage: booking seats', () => {
   type Form = Awaited<ReturnType<typeof openEvent>>;
 
   async function fillIn(form: Form, seats = '2') {
-    await userEvent.type(form.name, 'Ada Lovelace');
-    await userEvent.type(form.email, 'ada@example.com');
+    await userEvent.type(form.name, 'Lena Varga');
+    await userEvent.type(form.email, 'lena@example.com');
     await userEvent.clear(form.seats);
     await userEvent.type(form.seats, seats);
   }
@@ -68,7 +68,7 @@ describe('EventDetailPage: booking seats', () => {
     it('waits until a field is left before judging it, then clears the error once fixed', async () => {
       const form = await openEvent();
 
-      await userEvent.type(form.email, 'ada@');
+      await userEvent.type(form.email, 'lena@');
       expect(form.email).toHaveAttribute('aria-invalid', 'false');
 
       await userEvent.tab();
@@ -112,8 +112,8 @@ describe('EventDetailPage: booking seats', () => {
     ])('opens the confirmation for $case', async ({ status, statusText }) => {
       const request = await submitBooking(await openEvent());
       expect(request.request.body).toEqual({
-        name: 'Ada Lovelace',
-        email: 'ada@example.com',
+        name: 'Lena Varga',
+        email: 'lena@example.com',
         seats: 2,
       });
       expect(idempotencyKey(request)).toMatch(
@@ -153,7 +153,7 @@ describe('EventDetailPage: booking seats', () => {
       expect(form.email).toBeInvalid();
       expect(form.email).toHaveFocus();
       expect(form.name).toBeValid();
-      expect(form.name).toHaveValue('Ada Lovelace');
+      expect(form.name).toHaveValue('Lena Varga');
       expect(screen.getByRole('alert')).toHaveTextContent('Check the highlighted fields');
     });
 
@@ -178,7 +178,7 @@ describe('EventDetailPage: booking seats', () => {
         expect(form.seats).toHaveAccessibleDescription('Only 1 seat left.');
       });
       expect(screen.getByText('1 seat left of 100')).toBeVisible();
-      expect(form.name).toHaveValue('Ada Lovelace');
+      expect(form.name).toHaveValue('Lena Varga');
     });
 
     it('replaces the form with a sold out notice when the last seats are gone', async () => {

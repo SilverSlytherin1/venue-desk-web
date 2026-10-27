@@ -1,12 +1,37 @@
 :host {
   display: grid;
   gap: var(--space-6);
+  width: calc(100% - var(--space-8));
   max-width: var(--form-width);
-  margin-inline: auto;
+  margin: var(--space-12) auto 0;
   padding: var(--space-8) var(--space-6);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-block-start: 4px solid var(--color-brass);
+  border-radius: var(--radius-lg);
   background: var(--color-surface);
+  box-shadow: var(--shadow-lg);
+
+  @media (min-width: 40rem) {
+    padding: var(--space-10) var(--space-8);
+  }
+}
+
+.intro {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2);
+}
+
+.seal {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-block-end: var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--color-stage);
+  color: var(--color-stage-accent);
+  font-size: 1.2rem;
 }
 
 form {

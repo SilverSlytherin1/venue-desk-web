@@ -21,12 +21,12 @@ describe('BookingConfirmationPage', () => {
   });
 
   it('shows the reference, seats and name of the booking the API returned', async () => {
-    await arriveWith(makeBooking({ reference: 'VD-7K2Q9X', seats: 2, name: 'Ada Lovelace' }));
+    await arriveWith(makeBooking({ reference: 'VD-7K2Q9X', seats: 2, name: 'Lena Varga' }));
     (await nextRequest(eventUrl)).flush(makeEvent({ title: 'Jazz Night' }));
 
     expect(await screen.findByRole('heading', { name: 'Booking confirmed' })).toBeVisible();
     expect(screen.getByText('VD-7K2Q9X')).toBeVisible();
-    expect(screen.getByText('2 seats booked for Ada Lovelace (ada@example.com).')).toBeVisible();
+    expect(screen.getByText('2 seats booked for Lena Varga (lena@example.com).')).toBeVisible();
     expect(await screen.findByRole('heading', { name: 'Jazz Night' })).toBeVisible();
   });
 

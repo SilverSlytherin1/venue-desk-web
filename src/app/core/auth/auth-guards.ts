@@ -20,14 +20,15 @@ export const guestGuard: CanActivateFn = () =>
 /**
  * For routes nested under `authGuard`. The API enforces the same rule on every call, so this
  * guard is about not showing a screen that cannot work, not about security. A refused user lands
- * on the staff home, and the navigation state carries the missing role so that page can say why.
+ * on `fallbackUrl` (the staff home unless the route names a closer page), and the navigation state
+ * carries the missing role so that page can say why.
  */
 export const roleGuard =
-  (role: Role): CanActivateFn =>
+  (role: Role, fallbackUrl = '/staff'): CanActivateFn =>
   () => {
     const router = inject(Router);
     return (
       inject(AuthStore).user()?.role === role ||
-      new RedirectCommand(router.parseUrl('/staff'), { state: { requiredRole: role } })
+      new RedirectCommand(router.parseUrl(fallbackUrl), { state: { requiredRole: role } })
     );
   };

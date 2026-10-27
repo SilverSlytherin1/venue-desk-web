@@ -1,24 +1,22 @@
+import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 
 import { RouteFocus } from './core/a11y/route-focus';
-import { AuthStore } from './core/auth/auth-store';
 
 @Component({
   selector: 'app-root',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouteFocus, RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [RouterOutlet],
+  // On the root, so focus management survives a move between the public and the staff layout.
+  hostDirectives: [RouteFocus],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
 export class App {
-  private readonly auth = inject(AuthStore);
-  private readonly router = inject(Router);
+  private readonly document = inject(DOCUMENT);
 
-  protected readonly user = this.auth.user;
-
-  protected signOut(): void {
-    this.auth.logout();
-    void this.router.navigateByUrl('/events');
+  protected skipToContent(): void {
+    this.document.querySelector<HTMLElement>('main')?.focus();
   }
 }

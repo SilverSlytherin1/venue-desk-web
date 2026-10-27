@@ -2,9 +2,30 @@
   "id": "3f6a1d2c-8b4e-4c7a-9f10-2a3b4c5d6e04",
   "reference": "VD-7K2Q9X",
   "eventId": "0b1f7c1e-6f0a-4d58-9d7b-2f1c6a4e9a01",
-  "name": "Ada Lovelace",
-  "email": "ada@example.com",
+  "name": "Lena Varga",
+  "email": "lena@example.com",
   "seats": 2,
   "status": "CONFIRMED",
-  "createdAt": "2030-10-09T08:30:00.000Z"
+  "createdAt": "2030-10-09T08:30:00.000Z",
+  "messages": [
+    {
+      "kind": "CONFIRMATION",
+      "status": "SENT",
+      "scheduledFor": "2030-10-09T08:30:00.000Z",
+      "sentAt": "2030-10-09T08:30:01.000Z"
+    },
+    {
+      "kind": "REMINDER",
+      "status": "SCHEDULED",
+      "scheduledFor": "2030-11-13T19:00:00.000Z",
+      "sentAt": null
+    },
+    {
+      "kind": "FEEDBACK_REQUEST",
+      "status": "SCHEDULED",
+      "scheduledFor": "2030-11-15T19:00:00.000Z",
+      "sentAt": null
+    }
+  ],
+  "rating": null
 }

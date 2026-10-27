@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -16,9 +15,11 @@ import { ApiProblem, FieldError } from '../../core/api/api-problem';
 import { EventsApi } from '../../core/api/events-api';
 import { loadable } from '../../core/api/loadable';
 import { BookingRequest } from '../../core/api/models';
+import { VenueDatePipe } from '../../shared/format/venue-date';
 import { rejectionSummary } from '../../shared/forms/validation-message';
 import { Alert } from '../../shared/ui/alert';
 import { ErrorState } from '../../shared/ui/error-state';
+import { Icon } from '../../shared/ui/icon';
 import { problemMessage } from '../../shared/ui/problem-message';
 import { Skeleton } from '../../shared/ui/skeleton';
 import { MAX_SEATS_PER_BOOKING, seatCount } from './availability';
@@ -45,7 +46,16 @@ const NO_FIELD_ERRORS: readonly FieldError[] = [];
 @Component({
   selector: 'app-event-detail-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Alert, BookingForm, DatePipe, ErrorState, RouterLink, SeatAvailability, Skeleton],
+  imports: [
+    Alert,
+    BookingForm,
+    ErrorState,
+    Icon,
+    RouterLink,
+    SeatAvailability,
+    Skeleton,
+    VenueDatePipe,
+  ],
   templateUrl: './event-detail-page.html',
   styleUrl: './event-detail-page.scss',
 })

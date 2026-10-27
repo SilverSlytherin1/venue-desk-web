@@ -62,13 +62,17 @@
         <div>
           <dt>Created</dt>
           <dd>
-            <time [attr.datetime]="state.value.createdAt">{{ state.value.createdAt | date }}</time>
+            <time [attr.datetime]="state.value.createdAt">{{
+              state.value.createdAt | venueDate
+            }}</time>
           </dd>
         </div>
         <div>
           <dt>Last updated</dt>
           <dd>
-            <time [attr.datetime]="state.value.updatedAt">{{ state.value.updatedAt | date }}</time>
+            <time [attr.datetime]="state.value.updatedAt">{{
+              state.value.updatedAt | venueDate
+            }}</time>
           </dd>
         </div>
       </dl>

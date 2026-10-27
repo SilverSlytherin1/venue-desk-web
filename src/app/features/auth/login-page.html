@@ -1,4 +1,9 @@
-<h1>Staff sign in</h1>
+<div class="intro">
+  <span class="seal" aria-hidden="true"><app-icon name="clipboard" /></span>
+  <p class="eyebrow">Venue team</p>
+  <h1>Staff sign in</h1>
+  <p class="muted">Bookings, guest messages, feedback and the work for each event.</p>
+</div>
 
 @if (failure(); as failure) {
   <app-alert tone="danger">{{ failure }}</app-alert>
@@ -22,7 +27,7 @@
     />
   </app-form-field>
 
-  <button type="submit" class="button button--primary" [disabled]="submitting()">
+  <button type="submit" class="button button--primary button--block" [disabled]="submitting()">
     @if (submitting()) {
       Signing in…
     } @else {

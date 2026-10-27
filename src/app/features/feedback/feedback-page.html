@@ -1,0 +1,132 @@
+@let state = invitation.state();
+
+<div class="container">
+  <section class="sheet card" aria-labelledby="feedback-heading">
+    <p class="eyebrow">Your feedback</p>
+    <h1 id="feedback-heading">{{ heading() }}</h1>
+
+    @switch (state.status) {
+      @case ('loading') {
+        <app-skeleton label="Loading your feedback link" [lines]="2" />
+      }
+      @case ('error') {
+        @let problem = state.problem;
+        @if (isBrokenLink(problem)) {
+          <div class="message" role="alert">
+            <h2>This feedback link does not work</h2>
+            <p>
+              Check that the whole link was copied from the email. If it still fails, the booking
+              may have been removed.
+            </p>
+            <a class="button" routerLink="/">See upcoming events</a>
+          </div>
+        } @else if (problem.code === 'FEEDBACK_NOT_OPEN') {
+          <div class="message" role="alert">
+            <h2>Feedback is not open yet</h2>
+            <p>
+              The link starts working once the event has begun. Feedback is not collected for a
+              cancelled booking.
+            </p>
+            <a class="button" routerLink="/">See upcoming events</a>
+          </div>
+        } @else {
+          <app-error-state
+            heading="Your feedback link could not be opened"
+            [problem]="problem"
+            (retry)="invitation.reload()"
+          />
+        }
+      }
+      @case ('ready') {
+        @if (outcome(); as done) {
+          <div class="message thanks" role="status">
+            @if (done.already) {
+              <h2>You already rated this evening</h2>
+              <p>Thank you, {{ state.value.guestFirstName }}. One answer per booking is kept.</p>
+            } @else {
+              <h2>Thank you, {{ state.value.guestFirstName }}</h2>
+              <p>Your rating went straight to the team that ran the evening.</p>
+            }
+            @if (done.rating > 0) {
+              <app-stars [rating]="done.rating" />
+            }
+            <a class="button button--primary" routerLink="/">See what is on next</a>
+          </div>
+        } @else {
+          <p class="greeting">
+            Hi {{ state.value.guestFirstName }}, thanks for coming on
+            <time [attr.datetime]="state.value.eventStartsAt">{{
+              state.value.eventStartsAt | venueDate: 'EEEE d MMMM'
+            }}</time
+            >. It takes ten seconds.
+          </p>
+
+          @let sent = submission();
+          @if (sent.status === 'failed') {
+            <app-alert tone="danger">{{ sent.message }}</app-alert>
+          }
+
+          <form [formGroup]="form" appValidatedForm (validSubmit)="send()">
+            <fieldset
+              class="rating"
+              [attr.aria-describedby]="ratingError() ? 'rating-error' : null"
+            >
+              <legend>Your rating</legend>
+              <div class="stars" [attr.data-value]="rating()">
+                @for (value of ratings; track value) {
+                  <label [class.on]="rating() >= value">
+                    <input
+                      type="radio"
+                      formControlName="rating"
+                      class="visually-hidden"
+                      [value]="value"
+                      [attr.aria-invalid]="ratingError() !== null"
+                    />
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                      <path
+                        d="M12 3.5l2.6 5.3 5.9.9-4.25 4.1 1 5.8L12 16.9l-5.25 2.7 1-5.8L3.5 9.7l5.9-.9z"
+                      />
+                    </svg>
+                    <span class="visually-hidden">{{
+                      value === 1 ? '1 star' : value + ' stars'
+                    }}</span>
+                  </label>
+                }
+              </div>
+              <p class="word" aria-hidden="true">{{ words[rating()] || 'Choose 1 to 5 stars' }}</p>
+              @if (ratingError(); as error) {
+                <p id="rating-error" class="error">{{ error }}</p>
+              }
+            </fieldset>
+
+            <app-form-field
+              label="Comment"
+              [control]="form.controls.comment"
+              [hint]="commentLength() + ' of ' + maxLength + ' characters'"
+            >
+              <textarea
+                appFieldControl
+                formControlName="comment"
+                rows="4"
+                [attr.maxlength]="maxLength"
+                placeholder="What made the evening, or what would make it better?"
+              ></textarea>
+            </app-form-field>
+
+            <button
+              type="submit"
+              class="button button--primary button--block"
+              [disabled]="sent.status === 'submitting'"
+            >
+              @if (sent.status === 'submitting') {
+                Sending…
+              } @else {
+                Send feedback
+              }
+            </button>
+          </form>
+        }
+      }
+    }
+  </section>
+</div>

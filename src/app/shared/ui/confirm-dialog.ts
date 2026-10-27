@@ -35,8 +35,9 @@ let nextId = 0;
       width: min(28rem, calc(100vw - var(--space-8)));
       padding: var(--space-6);
       border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-lg);
       background: var(--color-surface);
+      box-shadow: var(--shadow-lg);
       color: var(--color-text);
     }
 
@@ -46,11 +47,12 @@ let nextId = 0;
     }
 
     dialog::backdrop {
-      background: rgb(0 0 0 / 0.5);
+      background: color-mix(in srgb, var(--color-stage) 60%, transparent);
+      backdrop-filter: blur(2px);
     }
 
     h2 {
-      font-size: var(--text-lg);
+      font-size: var(--text-xl);
     }
 
     .actions {
@@ -58,6 +60,7 @@ let nextId = 0;
       flex-wrap: wrap;
       justify-content: flex-end;
       gap: var(--space-3);
+      margin-block-start: var(--space-2);
     }
   `,
 })

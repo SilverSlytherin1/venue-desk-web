@@ -1,67 +1,87 @@
-<a class="back-link" routerLink="/events">All events</a>
-<h1>{{ heading() }}</h1>
-
 @let state = event.state();
-@switch (state.status) {
-  @case ('loading') {
-    <app-skeleton label="Loading event" />
-  }
-  @case ('error') {
-    <app-error-state
-      heading="This event could not be loaded"
-      [problem]="state.problem"
-      (retry)="event.reload()"
-    />
-  }
-  @case ('ready') {
-    <div class="layout">
-      <section class="about" aria-label="About this event">
-        <dl>
-          <div>
-            <dt>When</dt>
-            <dd>
-              <time [attr.datetime]="state.value.startsAt">{{ state.value.startsAt | date }}</time>
-            </dd>
-          </div>
-          <div>
-            <dt>Where</dt>
-            <dd>{{ state.value.venue }}</dd>
-          </div>
-          <div>
-            <dt>Seats</dt>
-            <dd><app-seat-availability [event]="state.value" /></dd>
-          </div>
-        </dl>
-        <p class="description">{{ state.value.description }}</p>
-      </section>
 
-      <section class="booking" aria-labelledby="booking-heading">
-        <h2 id="booking-heading">Book seats</h2>
+<section class="band" aria-labelledby="event-title">
+  <div class="container band-inner">
+    <a class="back-link" routerLink="/">All events</a>
+    @if (state.status === 'ready') {
+      <p class="eyebrow">{{ state.value.venue }}</p>
+    }
+    <h1 id="event-title">{{ heading() }}</h1>
+    @if (state.status === 'ready') {
+      <dl class="facts">
+        <div>
+          <dt><app-icon name="calendar" />When</dt>
+          <dd>
+            <time [attr.datetime]="state.value.startsAt">{{
+              state.value.startsAt | venueDate
+            }}</time>
+          </dd>
+        </div>
+        <div>
+          <dt><app-icon name="pin" />Where</dt>
+          <dd>{{ state.value.venue }}</dd>
+        </div>
+        <div class="seats">
+          <dt><app-icon name="seat" />Seats</dt>
+          <dd><app-seat-availability [event]="state.value" /></dd>
+        </div>
+      </dl>
+    }
+  </div>
+</section>
 
-        @let sent = submission();
-        @if (sent.status === 'rejected') {
-          <app-alert tone="warning">{{ sent.message }}</app-alert>
-        } @else if (sent.status === 'unconfirmed') {
-          <app-alert tone="danger">
-            <p>{{ sent.message }}</p>
-            <p>Trying again is safe: the same booking is never made twice.</p>
-            <button type="button" class="button" (click)="retry()">Try again</button>
-          </app-alert>
-        }
+<div class="container content">
+  @switch (state.status) {
+    @case ('loading') {
+      <app-skeleton label="Loading event" [lines]="3" />
+    }
+    @case ('error') {
+      <app-error-state
+        heading="This event could not be loaded"
+        [problem]="state.problem"
+        (retry)="event.reload()"
+      />
+    }
+    @case ('ready') {
+      <div class="layout">
+        <section class="about" aria-labelledby="about-heading">
+          <h2 id="about-heading">About this event</h2>
+          <p class="description">{{ state.value.description }}</p>
+          <ul class="perks">
+            <li><app-icon name="check" />Up to four seats per booking, free of charge</li>
+            <li><app-icon name="bell" />A reminder by email the day before</li>
+            <li><app-icon name="star" />One link afterwards to tell us how it went</li>
+          </ul>
+        </section>
 
-        @if (sent.status === 'closed') {
-          <p>Booking has closed because this event has already started.</p>
-        } @else if (state.value.seatsLeft === 0) {
-          <p>This event is sold out.</p>
-        } @else {
-          <app-booking-form
-            [maxSeats]="maxSeats()"
-            [submitting]="sent.status === 'submitting'"
-            [serverErrors]="fieldErrors()"
-            (submitted)="book($event)"
-          />
-        }
-      </section>
-    </div>
+        <section class="booking card" aria-labelledby="booking-heading">
+          <h2 id="booking-heading">Book seats</h2>
+
+          @let sent = submission();
+          @if (sent.status === 'rejected') {
+            <app-alert tone="warning">{{ sent.message }}</app-alert>
+          } @else if (sent.status === 'unconfirmed') {
+            <app-alert tone="danger">
+              <p>{{ sent.message }}</p>
+              <p>Trying again is safe: the same booking is never made twice.</p>
+              <button type="button" class="button" (click)="retry()">Try again</button>
+            </app-alert>
+          }
+
+          @if (sent.status === 'closed') {
+            <p class="notice">Booking has closed because this event has already started.</p>
+          } @else if (state.value.seatsLeft === 0) {
+            <p class="notice">This event is sold out.</p>
+          } @else {
+            <app-booking-form
+              [maxSeats]="maxSeats()"
+              [submitting]="sent.status === 'submitting'"
+              [serverErrors]="fieldErrors()"
+              (submitted)="book($event)"
+            />
+          }
+        </section>
+      </div>
+    }
   }
-}
+</div>

@@ -1,37 +1,88 @@
-<header class="page-header">
-  <h1>Upcoming events</h1>
-  <p class="muted">Pick an event to book up to four seats. No account needed.</p>
-</header>
+<section class="hero" aria-labelledby="hero-heading">
+  <svg class="stage-art" viewBox="0 0 400 400" aria-hidden="true" focusable="false">
+    <circle cx="200" cy="200" r="190" />
+    <circle cx="200" cy="200" r="150" />
+    <circle cx="200" cy="200" r="110" />
+    <circle cx="200" cy="200" r="70" class="glow" />
+    <path class="star" d="M200 160l9 19 21 3-15 15 4 21-19-10-19 10 4-21-15-15 21-3z" />
+  </svg>
+  <div class="container hero-inner">
+    <p class="eyebrow">Live at the venue</p>
+    <h1 id="hero-heading">Evenings worth leaving the house for</h1>
+    <p class="hero-lead">
+      Jazz, poetry, comedy and talks in two rooms. Book up to four seats in under a minute, with no
+      account and no fees.
+    </p>
+  </div>
+</section>
 
-@let state = events.state();
-@switch (state.status) {
-  @case ('loading') {
-    <app-skeleton label="Loading events" />
-  }
-  @case ('error') {
-    <app-error-state
-      heading="The events could not be loaded"
-      [problem]="state.problem"
-      (retry)="events.reload()"
-    />
-  }
-  @case ('ready') {
-    @if (state.value.total === 0) {
-      <app-empty-state heading="No upcoming events">
-        <p>Nothing is scheduled right now. New dates appear here as soon as they are announced.</p>
-      </app-empty-state>
-    } @else {
-      <ul class="cards">
-        @for (event of state.value.items; track event.id) {
-          <li><app-event-card [event]="event" /></li>
+<div class="container">
+  <section class="steps card" aria-labelledby="steps-heading">
+    <h2 id="steps-heading" class="eyebrow">How it works</h2>
+    <ol>
+      <li>
+        <span class="step-icon"><app-icon name="ticket" /></span>
+        <div>
+          <h3>Book your seats</h3>
+          <p>Pick an evening, tell us your name and email, and your seats are held at once.</p>
+        </div>
+      </li>
+      <li>
+        <span class="step-icon"><app-icon name="bell" /></span>
+        <div>
+          <h3>Reminder the day before</h3>
+          <p>A short note the day before with the time, the room and your booking reference.</p>
+        </div>
+      </li>
+      <li>
+        <span class="step-icon"><app-icon name="star" /></span>
+        <div>
+          <h3>Tell us how it went</h3>
+          <p>The morning after, one link to rate the evening. It takes ten seconds.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="programme" aria-labelledby="programme-heading">
+    <div class="section-heading">
+      <h2 id="programme-heading">Upcoming events</h2>
+      <p class="muted">Soonest first. Seats left are live.</p>
+    </div>
+
+    @let state = events.state();
+    @switch (state.status) {
+      @case ('loading') {
+        <app-skeleton label="Loading events" layout="cards" [lines]="3" />
+      }
+      @case ('error') {
+        <app-error-state
+          heading="The events could not be loaded"
+          [problem]="state.problem"
+          (retry)="events.reload()"
+        />
+      }
+      @case ('ready') {
+        @if (state.value.total === 0) {
+          <app-empty-state heading="No upcoming events">
+            <p>
+              Nothing is scheduled right now. New dates appear here as soon as they are announced.
+            </p>
+          </app-empty-state>
+        } @else {
+          <ul class="cards" aria-labelledby="programme-heading">
+            @for (event of state.value.items; track event.id) {
+              <li><app-event-card [event]="event" /></li>
+            }
+          </ul>
+          <app-pagination
+            [page]="state.value.page"
+            [pageSize]="pageSize"
+            [total]="state.value.total"
+            (pageChange)="goToPage($event)"
+          />
         }
-      </ul>
-      <app-pagination
-        [page]="state.value.page"
-        [pageSize]="pageSize"
-        [total]="state.value.total"
-        (pageChange)="goToPage($event)"
-      />
+      }
     }
-  }
-}
+  </section>
+</div>

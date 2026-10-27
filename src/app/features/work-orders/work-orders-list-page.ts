@@ -40,15 +40,14 @@ export class WorkOrdersListPage {
   readonly status = input(null, { transform: toStatus });
   readonly q = input('', { transform: (value: string | undefined) => value?.trim() ?? '' });
   readonly page = input(1, { transform: toPageNumber });
+  /** Resolved by the route when `roleGuard` turned the user away from a page and sent them here. */
+  readonly wasRefused = input(false);
 
   private readonly workOrdersApi = inject(WorkOrdersApi);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
   protected readonly isAdmin = inject(AuthStore).isAdmin;
-  /** Set by `roleGuard` when it turned the user away from a page and sent them here instead. */
-  protected readonly wasRefused =
-    this.router.currentNavigation()?.extras.state?.['requiredRole'] !== undefined;
   protected readonly pageSize = PAGE_SIZE;
   protected readonly isFiltered = computed(() => this.status() !== null || this.q() !== '');
   protected readonly workOrders = loadable(() =>

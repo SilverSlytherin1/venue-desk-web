@@ -1,21 +1,36 @@
 // @ts-expect-error TypeScript has no type for a stylesheet that the builder loads as text.
 import tokensSource from './_tokens.scss' with { loader: 'text' };
 
-/** Foreground, background and the WCAG AA minimum: 4.5 for text, 3 for control borders and focus. */
+/**
+ * Foreground, background and the minimum ratio. WCAG AA asks 4.5 for text and 3 for control
+ * borders, focus rings and meaningful graphics. The two pairs at 1.6 tell apart parts of a
+ * graphic that is also spelled out in text next to it, so they only need to be distinguishable.
+ */
 const PAIRS: [foreground: string, background: string, minimum: number][] = [
   ['--color-text', '--color-canvas', 4.5],
   ['--color-text', '--color-surface', 4.5],
   ['--color-text', '--color-surface-sunken', 4.5],
+  ['--color-heading', '--color-canvas', 4.5],
+  ['--color-heading', '--color-surface', 4.5],
   ['--color-text-muted', '--color-canvas', 4.5],
   ['--color-text-muted', '--color-surface', 4.5],
   ['--color-text-muted', '--color-surface-sunken', 4.5],
   ['--color-link', '--color-canvas', 4.5],
   ['--color-link', '--color-surface', 4.5],
+  ['--color-link', '--color-surface-sunken', 4.5],
+  ['--color-brass-text', '--color-canvas', 4.5],
+  ['--color-brass-text', '--color-surface', 4.5],
+  ['--color-on-stage', '--color-stage', 4.5],
+  ['--color-on-stage', '--color-stage-raised', 4.5],
+  ['--color-on-stage-muted', '--color-stage', 4.5],
+  ['--color-stage-accent', '--color-stage', 4.5],
+  ['--color-stage-accent', '--color-stage-raised', 4.5],
   ['--color-on-accent', '--color-accent', 4.5],
   ['--color-on-accent', '--color-accent-hover', 4.5],
   ['--color-on-danger', '--color-danger', 4.5],
   ['--color-on-danger', '--color-danger-hover', 4.5],
   ['--color-danger', '--color-surface', 4.5],
+  ['--color-danger', '--color-canvas', 4.5],
   ['--tone-neutral-fg', '--tone-neutral-bg', 4.5],
   ['--tone-info-fg', '--tone-info-bg', 4.5],
   ['--tone-success-fg', '--tone-success-bg', 4.5],
@@ -25,6 +40,14 @@ const PAIRS: [foreground: string, background: string, minimum: number][] = [
   ['--color-border-control', '--color-canvas', 3],
   ['--color-focus', '--color-surface', 3],
   ['--color-focus', '--color-canvas', 3],
+  ['--color-focus', '--color-stage', 3],
+  // Graphics that carry meaning: the filled stars of a rating and the filled part of a meter.
+  ['--color-star', '--color-surface', 3],
+  ['--color-star', '--color-star-empty', 1.6],
+  ['--color-meter-fill', '--color-surface', 3],
+  ['--color-meter-fill', '--color-meter-track', 3],
+  ['--color-meter-low', '--color-meter-track', 1.6],
+  ['--color-meter-full', '--color-meter-track', 3],
 ];
 
 function declarations(css: string): Map<string, string> {

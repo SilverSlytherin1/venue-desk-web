@@ -5,7 +5,7 @@ import { screen, waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 
 import { API, flushProblem, nextRequest, visit } from '../../../testing/app-testing';
-import { makePage, makeUser, makeWorkOrder } from '../../../testing/builders';
+import { makeDashboard, makeUser, makeWorkOrder } from '../../../testing/builders';
 
 describe('LoginPage', () => {
   const loginUrl = `${API}/auth/login`;
@@ -22,7 +22,7 @@ describe('LoginPage', () => {
     TestBed.inject(HttpTestingController).verify();
   });
 
-  it('sends the credentials and opens the work orders', async () => {
+  it('sends the credentials and opens the staff overview', async () => {
     await visit('/staff/login');
 
     const request = await signIn();
@@ -32,8 +32,8 @@ describe('LoginPage', () => {
     });
     request.flush(loginResponse);
 
-    (await nextRequest(`${API}/work-orders`)).flush(makePage([]));
-    expect(TestBed.inject(Router).url).toBe('/staff/work-orders');
+    (await nextRequest(`${API}/dashboard`)).flush(makeDashboard());
+    expect(TestBed.inject(Router).url).toBe('/staff/overview');
   });
 
   it('returns to the page that asked for the sign in', async () => {
@@ -57,15 +57,15 @@ describe('LoginPage', () => {
 
     (await signIn()).flush(loginResponse);
 
-    (await nextRequest(`${API}/work-orders`)).flush(makePage([]));
-    expect(TestBed.inject(Router).url).toBe('/staff/work-orders');
+    (await nextRequest(`${API}/dashboard`)).flush(makeDashboard());
+    expect(TestBed.inject(Router).url).toBe('/staff/overview');
   });
 
-  it('takes someone who is already signed in to the work orders', async () => {
+  it('takes someone who is already signed in to the staff overview', async () => {
     await visit('/staff/login', makeUser());
 
-    (await nextRequest(`${API}/work-orders`)).flush(makePage([]));
-    expect(TestBed.inject(Router).url).toBe('/staff/work-orders');
+    (await nextRequest(`${API}/dashboard`)).flush(makeDashboard());
+    expect(TestBed.inject(Router).url).toBe('/staff/overview');
   });
 
   it('explains wrong credentials and keeps the email for another try', async () => {

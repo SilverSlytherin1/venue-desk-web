@@ -8,11 +8,14 @@ body,
 h1,
 h2,
 h3,
+h4,
 p,
 ul,
 ol,
 dl,
-dd {
+dd,
+figure,
+blockquote {
   margin: 0;
 }
 
@@ -22,25 +25,36 @@ ol[class] {
   list-style: none;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
+  min-height: 100dvh;
   background: var(--color-canvas);
   color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--text-base);
   line-height: var(--leading-normal);
-  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
+// Headings use the serif display face, the text stays in the system sans.
 h1,
 h2,
 h3 {
-  font-weight: var(--weight-bold);
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-weight: var(--weight-semibold);
   line-height: var(--leading-tight);
+  letter-spacing: -0.01em;
   overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 
 h1 {
-  font-size: var(--text-2xl);
+  font-size: var(--text-3xl);
 }
 
 h2 {
@@ -53,7 +67,8 @@ h3 {
 
 a {
   color: var(--color-link);
-  text-underline-offset: 0.15em;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
 }
 
 :focus-visible {
@@ -65,6 +80,11 @@ a {
 // A heading is not a control, so it gets no ring.
 h1:focus {
   outline: none;
+}
+
+::selection {
+  background: var(--brass-200);
+  color: var(--ink-950);
 }
 
 .visually-hidden {
@@ -87,5 +107,6 @@ h1:focus {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

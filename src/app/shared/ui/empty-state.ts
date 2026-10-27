@@ -11,17 +11,28 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   styles: `
     :host {
       display: grid;
-      justify-items: start;
+      justify-items: center;
       gap: var(--space-3);
-      padding: var(--space-8) var(--space-6);
-      border: 1px dashed var(--color-border-control);
-      border-radius: var(--radius-md);
+      padding: var(--space-12) var(--space-6);
+      border: 1px dashed var(--color-border-strong);
+      border-radius: var(--radius-lg);
+      background: var(--color-surface);
       color: var(--color-text-muted);
+      text-align: center;
+    }
+
+    :host::before {
+      content: '';
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 50%, var(--color-brass) 0 0.35rem, transparent 0.4rem),
+        var(--color-surface-sunken);
     }
 
     h2 {
-      color: var(--color-text);
-      font-size: var(--text-lg);
+      font-size: var(--text-xl);
     }
   `,
 })

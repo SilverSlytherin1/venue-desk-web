@@ -1,0 +1,26 @@
+{
+  "items": [
+    {
+      "id": "6a7b8c9d-0e1f-4a2b-8c3d-4e5f6a7b8c31",
+      "kind": "REMINDER",
+      "status": "SCHEDULED",
+      "recipient": "ruth@example.com",
+      "subject": "Tomorrow: Jazz Night with the Blue Quartet",
+      "body": "Hello Ruth,\n\na quick reminder: Jazz Night with the Blue Quartet starts Thursday 14 November 2030 at 20:00 at Main Hall.\n\nBooking reference: VD-4H8N2P\n\nSee you tomorrow.",
+      "scheduledFor": "2030-11-13T19:00:00.000Z",
+      "sentAt": null,
+      "booking": {
+        "id": "3f6a1d2c-8b4e-4c7a-9f10-2a3b4c5d6e05",
+        "reference": "VD-4H8N2P"
+      },
+      "guestName": "Ruth Calder",
+      "event": {
+        "id": "0b1f7c1e-6f0a-4d58-9d7b-2f1c6a4e9a01",
+        "title": "Jazz Night with the Blue Quartet"
+      }
+    }
+  ],
+  "page": 1,
+  "pageSize": 20,
+  "total": 1
+}

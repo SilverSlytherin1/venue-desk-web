@@ -20,3 +20,21 @@ export function signInAs(role: keyof typeof ACCOUNTS): void {
   cy.wait('@login').its('request.body').should('deep.equal', { email, password });
   cy.findByRole('heading', { level: 1, name: 'Work orders' }).should('be.visible');
 }
+
+/**
+ * Signs in on the login form and lands on the staff overview, the default staff page. Stub any
+ * other call the test makes before calling this, or after it for pages visited later.
+ */
+export function signInToOverview(role: keyof typeof ACCOUNTS = 'staff'): void {
+  const { fixture, email, password } = ACCOUNTS[role];
+  cy.intercept('POST', '/api/v1/auth/login', { fixture }).as('login');
+  cy.intercept('GET', '/api/v1/dashboard', { fixture: 'dashboard.json' }).as('dashboard');
+
+  cy.visit('/staff/login');
+  cy.findByRole('textbox', { name: 'Email' }).type(email);
+  cy.findByLabelText('Password').type(password);
+  cy.findByRole('button', { name: 'Sign in' }).click();
+
+  cy.wait(['@login', '@dashboard']);
+  cy.findByRole('heading', { level: 1, name: 'Overview' }).should('be.visible');
+}

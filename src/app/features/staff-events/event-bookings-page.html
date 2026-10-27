@@ -1,0 +1,145 @@
+<a class="back-link" routerLink="/staff/events">All events</a>
+
+@let eventState = event.state();
+<header class="page-header">
+  <div>
+    <p class="eyebrow">Bookings</p>
+    <h1>{{ heading() }}</h1>
+    @if (eventState.status === 'ready') {
+      <p>
+        <time [attr.datetime]="eventState.value.startsAt">{{
+          eventState.value.startsAt | venueDate
+        }}</time
+        >, {{ eventState.value.venue }}
+      </p>
+    }
+  </div>
+  @if (eventState.status === 'ready') {
+    @let ev = eventState.value;
+    <div class="fill card">
+      <p class="figure">
+        {{ ev.seatsTaken }}<span class="muted"> of {{ ev.capacity }} seats</span>
+      </p>
+      <div
+        class="meter"
+        aria-hidden="true"
+        [attr.data-level]="ev.seatsLeft === 0 ? 'full' : null"
+        [style.--fill]="fill(ev.seatsTaken, ev.capacity)"
+      ></div>
+      <p class="muted small">{{ fill(ev.seatsTaken, ev.capacity) | percent }} full</p>
+    </div>
+  } @else if (eventState.status === 'error') {
+    <app-error-state
+      heading="The event details could not be loaded"
+      [problem]="eventState.problem"
+      (retry)="event.reload()"
+    />
+  }
+</header>
+
+@if (feedback(); as feedback) {
+  <app-alert [tone]="feedback.tone">{{ feedback.message }}</app-alert>
+}
+
+@let state = bookings.state();
+@switch (state.status) {
+  @case ('loading') {
+    <app-skeleton label="Loading bookings" [lines]="5" />
+  }
+  @case ('error') {
+    <app-error-state
+      heading="The bookings could not be loaded"
+      [problem]="state.problem"
+      (retry)="bookings.reload()"
+    />
+  }
+  @case ('ready') {
+    @if (state.value.total === 0) {
+      <app-empty-state heading="No bookings yet">
+        <p>Bookings appear here the moment a guest books.</p>
+      </app-empty-state>
+    } @else {
+      <div class="table-card">
+        <table class="data-table" role="table">
+          <caption class="visually-hidden">
+            Bookings
+          </caption>
+          <thead role="rowgroup">
+            <tr role="row">
+              <th role="columnheader" scope="col">Reference</th>
+              <th role="columnheader" scope="col">Guest</th>
+              <th role="columnheader" scope="col" class="numeric">Seats</th>
+              <th role="columnheader" scope="col">Status</th>
+              <th role="columnheader" scope="col">Messages</th>
+              <th role="columnheader" scope="col">Rating</th>
+              <th role="columnheader" scope="col"><span class="visually-hidden">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody role="rowgroup">
+            @for (booking of state.value.items; track booking.id) {
+              <tr role="row" [class.cancelled]="booking.status === 'CANCELLED'">
+                <th role="rowheader" scope="row" class="reference">{{ booking.reference }}</th>
+                <td role="cell" data-label="Guest">
+                  <span class="guest">{{ booking.name }}</span>
+                  <span class="muted email">{{ booking.email }}</span>
+                </td>
+                <td role="cell" data-label="Seats" class="numeric">{{ booking.seats }}</td>
+                <td role="cell" data-label="Status">
+                  @if (booking.status === 'CONFIRMED') {
+                    <app-badge tone="success">Confirmed</app-badge>
+                  } @else {
+                    <app-badge>Cancelled</app-badge>
+                  }
+                </td>
+                <td role="cell" data-label="Messages" class="wide">
+                  <app-message-chips [messages]="booking.messages" />
+                </td>
+                <td role="cell" data-label="Rating">
+                  @if (booking.rating !== null) {
+                    <app-stars [rating]="booking.rating" />
+                  } @else {
+                    <span class="muted">None</span>
+                  }
+                </td>
+                <td role="cell" class="actions">
+                  @if (booking.status === 'CONFIRMED' && cancellable()) {
+                    <button
+                      type="button"
+                      class="button button--small"
+                      [attr.aria-label]="'Cancel booking ' + booking.reference"
+                      [disabled]="cancelling() === booking.id"
+                      (click)="askToCancel(booking)"
+                    >
+                      Cancel
+                    </button>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <app-pagination
+        [page]="state.value.page"
+        [pageSize]="pageSize"
+        [total]="state.value.total"
+        (pageChange)="goToPage($event)"
+      />
+    }
+  }
+}
+
+<app-confirm-dialog
+  [heading]="'Cancel booking ' + (toCancel()?.reference ?? '') + '?'"
+  confirmLabel="Cancel booking"
+  cancelLabel="Keep booking"
+  (confirmed)="cancel()"
+>
+  @if (toCancel(); as booking) {
+    <p>
+      {{ booking.seats === 1 ? 'The seat goes' : 'The ' + booking.seats + ' seats go' }} back on
+      sale for other guests, and the messages still scheduled for {{ booking.name }} are cancelled.
+      This cannot be undone.
+    </p>
+  }
+</app-confirm-dialog>

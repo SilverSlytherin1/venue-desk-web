@@ -1,15 +1,15 @@
-import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { WorkOrder } from '../../core/api/models';
+import { VenueDatePipe } from '../../shared/format/venue-date';
 import { Badge } from '../../shared/ui/badge';
 import { PRIORITY, STATUS } from './work-order-labels';
 
 @Component({
   selector: 'app-work-order-table',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Badge, DatePipe, RouterLink],
+  imports: [Badge, RouterLink, VenueDatePipe],
   templateUrl: './work-order-table.html',
   styleUrl: './work-order-table.scss',
 })

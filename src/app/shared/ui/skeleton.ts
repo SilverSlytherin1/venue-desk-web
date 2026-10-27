@@ -11,6 +11,7 @@ import {
 @Component({
   selector: 'app-skeleton',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '[class.cards]': "layout() === 'cards'" },
   template: `
     <p class="visually-hidden" role="status">{{ announcement() }}</p>
     @for (bar of bars(); track bar) {
@@ -25,15 +26,38 @@ import {
     }
 
     .bar {
-      height: var(--space-12);
-      border-radius: var(--radius-md);
-      background: var(--color-surface-sunken);
-      animation: pulse 1.2s ease-in-out infinite alternate;
+      height: var(--skeleton-height, var(--space-16));
+      border-radius: var(--radius-lg);
+      background: linear-gradient(
+          100deg,
+          transparent 30%,
+          color-mix(in srgb, var(--color-surface) 70%, transparent) 50%,
+          transparent 70%
+        )
+        var(--color-surface-sunken);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s ease-in-out infinite;
     }
 
-    @keyframes pulse {
+    :host(:not(.cards)) .bar:nth-of-type(2n) {
+      width: 92%;
+    }
+
+    :host(.cards) {
+      grid-template-columns: repeat(auto-fill, minmax(min(18rem, 100%), 1fr));
+      gap: var(--space-6);
+    }
+
+    :host(.cards) .bar {
+      height: 16rem;
+    }
+
+    @keyframes shimmer {
+      from {
+        background-position: 120% 0;
+      }
       to {
-        opacity: 0.5;
+        background-position: -80% 0;
       }
     }
   `,
@@ -41,6 +65,8 @@ import {
 export class Skeleton {
   readonly label = input.required<string>();
   readonly lines = input(4);
+  /** Rows for a list or a table, cards for a grid of cards. */
+  readonly layout = input<'rows' | 'cards'>('rows');
 
   protected readonly bars = computed(() => Array.from({ length: this.lines() }, (_, i) => i));
   protected readonly announcement = signal('');

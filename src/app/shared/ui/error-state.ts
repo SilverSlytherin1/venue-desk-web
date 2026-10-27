@@ -22,9 +22,11 @@ import { problemMessage } from './problem-message';
       justify-items: start;
       gap: var(--space-3);
       padding: var(--space-6);
+      border: 1px solid color-mix(in srgb, var(--tone-fg) 25%, transparent);
       border-inline-start: var(--space-1) solid var(--tone-fg);
-      border-radius: var(--radius-sm);
+      border-radius: var(--radius-lg);
       background: var(--tone-bg);
+      color: var(--tone-fg);
     }
 
     h2 {

@@ -5,16 +5,19 @@ import { EventsApi } from '../../core/api/events-api';
 import { loadable } from '../../core/api/loadable';
 import { EmptyState } from '../../shared/ui/empty-state';
 import { ErrorState } from '../../shared/ui/error-state';
+import { Icon } from '../../shared/ui/icon';
 import { Pagination, toPageNumber } from '../../shared/ui/pagination';
 import { Skeleton } from '../../shared/ui/skeleton';
 import { EventCard } from './event-card';
 
 const PAGE_SIZE = 12;
 
+/** The home page: what the venue promises, how booking works, and the programme. */
+
 @Component({
   selector: 'app-events-list-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [EmptyState, ErrorState, EventCard, Pagination, Skeleton],
+  imports: [EmptyState, ErrorState, EventCard, Icon, Pagination, Skeleton],
   templateUrl: './events-list-page.html',
   styleUrl: './events-list-page.scss',
 })

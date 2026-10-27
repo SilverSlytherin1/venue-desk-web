@@ -4,7 +4,6 @@ import { RedirectCommand, ResolveFn, Router, Routes } from '@angular/router';
 import { Booking } from '../../core/api/models';
 import { BookingConfirmationPage } from './booking-confirmation-page';
 import { EventDetailPage } from './event-detail-page';
-import { EventsListPage } from './events-list-page';
 
 /**
  * A confirmation exists only for a booking the API returned, which the event page hands over in
@@ -22,7 +21,12 @@ const confirmedBooking: ResolveFn<Booking> = (route) => {
 };
 
 export default [
-  { path: '', component: EventsListPage, title: 'Events | Venue Desk' },
+  // The programme moved to the home page. Old links keep working, page number included.
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: ({ queryParams }) => inject(Router).createUrlTree(['/'], { queryParams }),
+  },
   { path: ':eventId', component: EventDetailPage, title: 'Book seats | Venue Desk' },
   {
     path: ':eventId/booked',

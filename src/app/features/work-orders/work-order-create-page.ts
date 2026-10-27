@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,6 +17,7 @@ import { loadable } from '../../core/api/loadable';
 import { WORK_ORDER_PRIORITIES, WorkOrderPriority } from '../../core/api/models';
 import { UsersApi } from '../../core/api/users-api';
 import { WorkOrdersApi } from '../../core/api/work-orders-api';
+import { VenueDatePipe } from '../../shared/format/venue-date';
 import { FieldControl, FormField } from '../../shared/forms/form-field';
 import { ValidatedForm } from '../../shared/forms/validated-form';
 import { rejectionSummary } from '../../shared/forms/validation-message';
@@ -33,12 +33,12 @@ const EVENT_OPTIONS_LIMIT = 100;
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     Alert,
-    DatePipe,
     FieldControl,
     FormField,
     ReactiveFormsModule,
     RouterLink,
     ValidatedForm,
+    VenueDatePipe,
   ],
   templateUrl: './work-order-create-page.html',
   styleUrl: './work-order-create-page.scss',

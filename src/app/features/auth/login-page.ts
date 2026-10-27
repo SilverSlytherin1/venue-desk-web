@@ -17,12 +17,13 @@ import { FieldControl, FormField } from '../../shared/forms/form-field';
 import { ValidatedForm } from '../../shared/forms/validated-form';
 import { rejectionSummary } from '../../shared/forms/validation-message';
 import { Alert } from '../../shared/ui/alert';
+import { Icon } from '../../shared/ui/icon';
 import { problemMessage } from '../../shared/ui/problem-message';
 
 @Component({
   selector: 'app-login-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Alert, FieldControl, FormField, ReactiveFormsModule, ValidatedForm],
+  imports: [Alert, FieldControl, FormField, Icon, ReactiveFormsModule, ValidatedForm],
   templateUrl: './login-page.html',
   styleUrl: './login-page.scss',
 })

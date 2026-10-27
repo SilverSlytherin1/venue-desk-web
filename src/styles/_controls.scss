@@ -7,21 +7,35 @@
   justify-content: center;
   gap: var(--space-2);
   min-height: var(--control-height);
-  padding: 0 var(--space-4);
-  border: 1px solid var(--color-border-control);
-  border-radius: var(--radius-md);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
   background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
   color: var(--color-text);
   font: inherit;
-  font-weight: var(--weight-medium);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  line-height: 1.2;
+  text-align: center;
   text-decoration: none;
+  white-space: nowrap;
   cursor: pointer;
-  transition: background-color var(--duration-fast);
+  transition:
+    background-color var(--duration-fast),
+    border-color var(--duration-fast),
+    box-shadow var(--duration-fast),
+    transform var(--duration-fast);
 
   @media (hover: hover) {
     &:hover:not(:disabled) {
+      border-color: var(--color-border-control);
       background: var(--color-surface-sunken);
     }
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
   }
 
   &:disabled {
@@ -34,6 +48,7 @@
   border-color: var(--color-accent);
   background: var(--color-accent);
   color: var(--color-on-accent);
+  box-shadow: var(--shadow-md);
 
   @media (hover: hover) {
     &:hover:not(:disabled) {
@@ -59,6 +74,17 @@
 .button--quiet {
   border-color: transparent;
   background: transparent;
+  box-shadow: none;
+}
+
+.button--small {
+  min-height: 2rem;
+  padding-inline: var(--space-3);
+  font-size: var(--text-xs);
+}
+
+.button--block {
+  width: 100%;
 }
 
 input,
@@ -73,6 +99,15 @@ textarea {
   color: var(--color-text);
   // 16px keeps iOS from zooming the page when a field takes focus.
   font: inherit;
+  transition:
+    border-color var(--duration-fast),
+    box-shadow var(--duration-fast);
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--color-focus);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-focus) 35%, transparent);
+  }
 
   &[aria-invalid='true'] {
     border-color: var(--color-danger);
@@ -80,10 +115,30 @@ textarea {
   }
 }
 
+input[type='radio'],
+input[type='checkbox'] {
+  width: auto;
+  height: auto;
+}
+
+select {
+  padding-inline-end: var(--space-8);
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, currentColor 50%),
+    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position:
+    right 1.1rem center,
+    right 0.8rem center;
+  background-size: 0.3rem 0.3rem;
+  background-repeat: no-repeat;
+}
+
 textarea {
   height: auto;
   min-height: calc(var(--control-height) * 3);
   padding-block: var(--space-2);
+  line-height: var(--leading-normal);
   resize: vertical;
 }
 
@@ -93,6 +148,7 @@ textarea {
   justify-self: start;
   gap: var(--space-2);
   min-height: var(--control-height);
+  color: var(--color-text-muted);
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
   text-decoration: none;
@@ -103,6 +159,7 @@ textarea {
 
   @media (hover: hover) {
     &:hover {
+      color: var(--color-text);
       text-decoration: underline;
     }
   }

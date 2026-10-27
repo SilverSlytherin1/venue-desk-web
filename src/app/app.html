@@ -1,40 +1,5 @@
 <!-- A button, not a link: with <base href="/"> an in-page anchor would navigate to the root. -->
-<button type="button" class="skip-link button" (click)="main.focus()">Skip to content</button>
+<button type="button" class="skip-link button" (click)="skipToContent()">Skip to content</button>
 
-<header>
-  <div class="bar">
-    <a class="brand" routerLink="/events">Venue Desk</a>
-
-    <nav aria-label="Main">
-      <ul class="links">
-        <li>
-          <a routerLink="/events" routerLinkActive="active" ariaCurrentWhenActive="page">Events</a>
-        </li>
-        @if (user()) {
-          <li>
-            <a
-              routerLink="/staff/work-orders"
-              routerLinkActive="active"
-              ariaCurrentWhenActive="page"
-            >
-              Work orders
-            </a>
-          </li>
-        }
-      </ul>
-    </nav>
-
-    <div class="account">
-      @if (user(); as user) {
-        <span class="who">{{ user.name }}</span>
-        <button type="button" class="button button--quiet" (click)="signOut()">Sign out</button>
-      } @else {
-        <a class="button button--quiet" routerLink="/staff/login">Staff sign in</a>
-      }
-    </div>
-  </div>
-</header>
-
-<main #main tabindex="-1" appRouteFocus>
-  <router-outlet />
-</main>
+<!-- Each layout (public pages, staff area) brings its own header and <main>. -->
+<router-outlet />

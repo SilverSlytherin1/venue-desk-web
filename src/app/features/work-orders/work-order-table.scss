@@ -2,8 +2,9 @@
   display: block;
   overflow: hidden;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   background: var(--color-surface);
+  box-shadow: var(--shadow-md);
   // The table reflows on its own width, not the viewport's, so it also works in a narrow column.
   container-type: inline-size;
 }
@@ -23,8 +24,10 @@ td {
 thead th {
   background: var(--color-surface-sunken);
   color: var(--color-text-muted);
-  font-size: var(--text-sm);
-  font-weight: var(--weight-medium);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
 }
 
 tbody tr {
@@ -32,7 +35,17 @@ tbody tr {
 }
 
 tbody th {
-  font-weight: var(--weight-medium);
+  font-weight: var(--weight-semibold);
+}
+
+tbody tr {
+  transition: background-color var(--duration-fast);
+
+  @media (hover: hover) {
+    &:hover {
+      background: var(--color-surface-sunken);
+    }
+  }
 }
 
 .number {
@@ -45,6 +58,7 @@ tbody th {
 
 a {
   display: block;
+  color: var(--color-heading);
   text-decoration: none;
 
   @media (hover: hover) {

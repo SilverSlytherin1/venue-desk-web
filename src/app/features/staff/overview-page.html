@@ -1,0 +1,135 @@
+<header class="page-header">
+  <div>
+    <p class="eyebrow">{{ today | venueDate: 'EEEE d MMMM' }}</p>
+    <h1>Overview</h1>
+    <p>Welcome back, {{ firstName() }}. Bookings, guest messages and ratings at a glance.</p>
+  </div>
+  <a class="button" routerLink="/staff/messages">
+    <app-icon name="mail" />
+    Messages
+  </a>
+</header>
+
+@let state = dashboard.state();
+@switch (state.status) {
+  @case ('loading') {
+    <app-skeleton label="Loading the overview" layout="cards" [lines]="4" />
+  }
+  @case ('error') {
+    <app-error-state
+      heading="The overview could not be loaded"
+      [problem]="state.problem"
+      (retry)="dashboard.reload()"
+    />
+  }
+  @case ('ready') {
+    @let data = state.value;
+    <section aria-labelledby="kpi-heading">
+      <h2 id="kpi-heading" class="visually-hidden">Key figures</h2>
+      <dl class="kpis">
+        <div class="tile">
+          <dt><app-icon name="ticket" />Seats booked, last 7 days</dt>
+          <dd class="value">{{ data.seatsBookedLast7Days }}</dd>
+          <dd class="sub">
+            {{ data.bookingsLast7Days === 1 ? '1 booking' : data.bookingsLast7Days + ' bookings' }}
+          </dd>
+        </div>
+        <div class="tile">
+          <dt><app-icon name="mail" />Messages sent, last 30 days</dt>
+          <dd class="value">{{ data.messagesSentLast30Days }}</dd>
+          <dd class="sub">{{ data.messagesScheduled }} more scheduled</dd>
+        </div>
+        <div class="tile">
+          <dt><app-icon name="star" />Average rating</dt>
+          @if (data.feedback.average !== null) {
+            <dd class="value">
+              {{ data.feedback.average | number: '1.1-1' }}<span class="of">/ 5</span>
+            </dd>
+            <dd class="sub">
+              <app-stars [rating]="data.feedback.average" />
+              from {{ data.feedback.count === 1 ? '1 rating' : data.feedback.count + ' ratings' }}
+            </dd>
+          } @else {
+            <dd class="value">None yet</dd>
+            <dd class="sub">Ratings arrive the day after each event</dd>
+          }
+        </div>
+        <div class="tile highlight">
+          <dt><app-icon name="timer" />Staff time saved</dt>
+          <dd class="value">{{ timeSaved(data.messagesSentLast30Days) }}</dd>
+          <dd class="sub">
+            Estimate: {{ minutesPerMessage }} minutes for each message nobody had to write
+          </dd>
+        </div>
+      </dl>
+    </section>
+
+    <div class="panels">
+      <section class="panel card" aria-labelledby="upcoming-heading">
+        <div class="section-heading">
+          <h2 id="upcoming-heading">Coming up</h2>
+          <a routerLink="/staff/events">All events</a>
+        </div>
+        @if (data.upcomingEvents.length === 0) {
+          <app-empty-state heading="Nothing scheduled">
+            <p>New events show up here with their bookings.</p>
+          </app-empty-state>
+        } @else {
+          <ul class="events" aria-labelledby="upcoming-heading">
+            @for (event of data.upcomingEvents; track event.id) {
+              <li>
+                <div class="event-line">
+                  <a [routerLink]="['/staff/events', event.id]">{{ event.title }}</a>
+                  <span class="muted">{{ fill(event) | percent }}</span>
+                </div>
+                <p class="muted small">
+                  <time [attr.datetime]="event.startsAt">{{ event.startsAt | venueDate }}</time
+                  >,
+                  {{ event.venue }}
+                </p>
+                <div
+                  class="meter"
+                  aria-hidden="true"
+                  [attr.data-level]="event.seatsLeft === 0 ? 'full' : null"
+                  [style.--fill]="fill(event)"
+                ></div>
+                <p class="small">{{ event.seatsTaken }} of {{ event.capacity }} seats booked</p>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <section class="panel card" aria-labelledby="feedback-heading">
+        <div class="section-heading">
+          <h2 id="feedback-heading">Latest feedback</h2>
+          <a routerLink="/staff/feedback">All feedback</a>
+        </div>
+        @if (data.recentFeedback.length === 0) {
+          <app-empty-state heading="No feedback yet">
+            <p>Guests are asked the day after the event.</p>
+          </app-empty-state>
+        } @else {
+          <ul class="quotes" aria-labelledby="feedback-heading">
+            @for (item of data.recentFeedback; track item.id) {
+              <li>
+                <app-stars [rating]="item.rating" />
+                @if (item.comment) {
+                  <blockquote>{{ item.comment }}</blockquote>
+                } @else {
+                  <p class="muted">Rated without a comment.</p>
+                }
+                <p class="muted small">
+                  {{ item.guestName }}, {{ item.event.title }},
+                  <time [attr.datetime]="item.createdAt">{{
+                    item.createdAt | venueDate: 'd MMM'
+                  }}</time>
+                </p>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+    </div>
+  }
+}

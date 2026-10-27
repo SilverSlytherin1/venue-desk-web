@@ -1,0 +1,129 @@
+:host {
+  display: block;
+  padding-block-start: var(--space-12);
+}
+
+.sheet {
+  display: grid;
+  gap: var(--space-4);
+  // Wide enough for "How was <event title>?" on one line at desktop sizes.
+  max-width: 42rem;
+  margin-inline: auto;
+  border-block-start: 4px solid var(--color-brass);
+
+  @media (min-width: 40rem) {
+    padding: var(--space-10);
+  }
+
+  // Balanced wrapping halves a title that just misses one line. When it has to wrap, fill the
+  // first line and only avoid a lone last word.
+  h1 {
+    text-wrap: pretty;
+  }
+}
+
+.greeting {
+  color: var(--color-text-muted);
+  font-size: var(--text-lg);
+}
+
+form {
+  display: grid;
+  gap: var(--space-6);
+  margin-block-start: var(--space-2);
+}
+
+.rating {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+
+  legend {
+    margin-block-end: var(--space-2);
+    padding: 0;
+    font-weight: var(--weight-medium);
+  }
+}
+
+.stars {
+  display: flex;
+  gap: var(--space-1);
+
+  label {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-md);
+    color: var(--color-star-empty);
+    cursor: pointer;
+    transition:
+      color var(--duration-fast),
+      transform var(--duration-fast);
+  }
+
+  svg {
+    width: 2.4rem;
+    height: 2.4rem;
+    fill: currentColor;
+  }
+
+  .on {
+    color: var(--color-star);
+  }
+
+  // Hovering previews the rating: every star up to the pointer lights up, the rest go dim.
+  @media (hover: hover) {
+    &:hover label {
+      color: var(--color-star);
+    }
+
+    label:hover ~ label {
+      color: var(--color-star-empty);
+    }
+
+    label:hover {
+      transform: scale(1.08);
+    }
+  }
+
+  label:has(input:focus-visible) {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+}
+
+.word {
+  min-height: 1.5rem;
+  color: var(--color-brass-text);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+}
+
+.error {
+  color: var(--color-danger);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.message {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-sunken);
+
+  p {
+    color: var(--color-text-muted);
+  }
+}
+
+.thanks {
+  --stars-size: 1.75rem;
+
+  justify-items: center;
+  text-align: center;
+}

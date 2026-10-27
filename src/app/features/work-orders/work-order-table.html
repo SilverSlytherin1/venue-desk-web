@@ -39,7 +39,7 @@
         </td>
         <td role="cell" data-label="Updated">
           <time [attr.datetime]="workOrder.updatedAt">{{
-            workOrder.updatedAt | date: 'd MMM y'
+            workOrder.updatedAt | venueDate: 'd MMM y'
           }}</time>
         </td>
       </tr>

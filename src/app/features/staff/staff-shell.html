@@ -1,0 +1,57 @@
+<aside class="sidebar" [class.open]="menuOpen()">
+  <a class="brand" routerLink="/staff/overview" aria-label="Venue Desk, staff overview">
+    <app-brand />
+  </a>
+  <nav id="staff-nav" aria-label="Staff">
+    <ul class="nav">
+      @for (item of nav; track item.path) {
+        <li>
+          <a [routerLink]="item.path" routerLinkActive="active" ariaCurrentWhenActive="page">
+            <app-icon [name]="item.icon" />
+            {{ item.label }}
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+  <a class="public-link" routerLink="/">
+    View the public site
+    <app-icon name="arrow" />
+  </a>
+</aside>
+
+<div class="workspace">
+  <header class="topbar">
+    <button
+      type="button"
+      class="button button--quiet menu-button"
+      aria-controls="staff-nav"
+      [attr.aria-expanded]="menuOpen()"
+      (click)="toggleMenu()"
+    >
+      <app-icon [name]="menuOpen() ? 'close' : 'menu'" />
+      Menu
+    </button>
+    <a class="mobile-brand" routerLink="/staff/overview" aria-label="Venue Desk, staff overview">
+      <app-brand class="compact" />
+    </a>
+
+    @if (user(); as user) {
+      <div class="account">
+        <span class="avatar" aria-hidden="true">{{ initials() }}</span>
+        <span class="who">
+          <span class="name">{{ user.name }}</span>
+          <span class="role">{{ roleLabel() }}</span>
+        </span>
+        <button type="button" class="button button--small" (click)="signOut()">
+          <app-icon name="logout" />
+          Sign out
+        </button>
+      </div>
+    }
+  </header>
+
+  <main tabindex="-1">
+    <router-outlet />
+  </main>
+</div>

@@ -1,4 +1,3 @@
-import { DATE_PIPE_DEFAULT_OPTIONS } from '@angular/common';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
@@ -23,6 +22,5 @@ export const appConfig: ApplicationConfig = {
     // Same origin in every environment: the dev server proxies it (proxy.conf.json) and
     // production is expected to do the same at the reverse proxy.
     { provide: API_BASE_URL, useValue: '/api/v1' },
-    { provide: DATE_PIPE_DEFAULT_OPTIONS, useValue: { dateFormat: 'EEE d MMM y, HH:mm' } },
   ],
 };

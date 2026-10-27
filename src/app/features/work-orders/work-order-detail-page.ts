@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import {
   afterNextRender,
   ChangeDetectionStrategy,
@@ -20,6 +19,7 @@ import { ApiProblem } from '../../core/api/api-problem';
 import { loadable } from '../../core/api/loadable';
 import { WorkOrderStatus } from '../../core/api/models';
 import { WorkOrdersApi } from '../../core/api/work-orders-api';
+import { VenueDatePipe } from '../../shared/format/venue-date';
 import { Alert } from '../../shared/ui/alert';
 import { Badge } from '../../shared/ui/badge';
 import { ErrorState } from '../../shared/ui/error-state';
@@ -37,7 +37,7 @@ interface Feedback {
 @Component({
   selector: 'app-work-order-detail-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Alert, Badge, DatePipe, ErrorState, RouterLink, Skeleton, WorkOrderActions],
+  imports: [Alert, Badge, ErrorState, RouterLink, Skeleton, VenueDatePipe, WorkOrderActions],
   templateUrl: './work-order-detail-page.html',
   styleUrl: './work-order-detail-page.scss',
 })

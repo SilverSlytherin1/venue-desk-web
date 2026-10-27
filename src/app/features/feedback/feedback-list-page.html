@@ -1,0 +1,125 @@
+<header class="page-header">
+  <div>
+    <p class="eyebrow">Guests</p>
+    <h1>Feedback</h1>
+    <p>Ratings and comments from the link guests get the day after an event.</p>
+  </div>
+</header>
+
+<div class="filters" role="search" aria-label="Filter feedback">
+  @let options = eventOptions();
+  <label>
+    <span>Event</span>
+    <select #eventSelect (change)="filterByEvent(eventSelect.value)">
+      <option value="" [selected]="!eventId()">All events</option>
+      @if (options.status === 'ready') {
+        @for (event of options.value; track event.id) {
+          @let label = event.title + ', ' + (event.startsAt | venueDate: 'd MMM y');
+          <option [value]="event.id" [selected]="eventId() === event.id">{{ label }}</option>
+        }
+      }
+    </select>
+  </label>
+  <label>
+    <span>Rating</span>
+    <select #ratingSelect (change)="filterByRating(ratingSelect.value)">
+      <option value="" [selected]="rating() === null">All ratings</option>
+      @for (value of ratings; track value) {
+        @let label = value === 1 ? '1 star' : value + ' stars';
+        <option [value]="value" [selected]="rating() === value">{{ label }}</option>
+      }
+    </select>
+  </label>
+  @if (isFiltered()) {
+    <button type="button" class="button button--quiet" (click)="clearFilters()">
+      Clear filters
+    </button>
+  }
+</div>
+@if (options.status === 'error') {
+  <p class="muted small">
+    The list of events could not be loaded, so feedback cannot be filtered by event right now.
+    <button type="button" class="button button--small" (click)="events.reload()">
+      Load events again
+    </button>
+  </p>
+}
+
+<section class="card" aria-labelledby="summary-heading">
+  <h2 id="summary-heading" class="eyebrow">{{ eventId() ? 'This event' : 'All events' }}</h2>
+  @let summaryState = summary.state();
+  @switch (summaryState.status) {
+    @case ('loading') {
+      <app-skeleton label="Loading the rating summary" [lines]="1" />
+    }
+    @case ('error') {
+      <app-error-state
+        heading="The rating summary could not be loaded"
+        [problem]="summaryState.problem"
+        (retry)="summary.reload()"
+      />
+    }
+    @case ('ready') {
+      <app-rating-summary [summary]="summaryState.value" />
+    }
+  }
+</section>
+
+@let state = feedback.state();
+@switch (state.status) {
+  @case ('loading') {
+    <app-skeleton label="Loading feedback" [lines]="4" />
+  }
+  @case ('error') {
+    <app-error-state
+      heading="The feedback could not be loaded"
+      [problem]="state.problem"
+      (retry)="feedback.reload()"
+    />
+  }
+  @case ('ready') {
+    @if (state.value.total === 0) {
+      @if (isFiltered()) {
+        <app-empty-state heading="No feedback matches these filters">
+          <p>Try another event or rating, or clear the filters.</p>
+        </app-empty-state>
+      } @else {
+        <app-empty-state heading="No feedback yet">
+          <p>Guests are asked the day after each event.</p>
+        </app-empty-state>
+      }
+    } @else {
+      <ul class="comments" aria-label="Comments">
+        @for (item of state.value.items; track item.id) {
+          <li class="comment card">
+            <div class="top">
+              <app-stars [rating]="item.rating" />
+              <time class="muted" [attr.datetime]="item.createdAt">{{
+                item.createdAt | venueDate: 'd MMM y'
+              }}</time>
+            </div>
+            @if (item.comment) {
+              <blockquote>{{ item.comment }}</blockquote>
+            } @else {
+              <p class="muted">Rated without a comment.</p>
+            }
+            <p class="by">
+              <span class="guest">{{ item.guestName }}</span>
+              <span class="muted">
+                <a [routerLink]="['/staff/events', item.event.id]">{{ item.event.title }}</a
+                >,
+                <span class="reference">{{ item.bookingReference }}</span>
+              </span>
+            </p>
+          </li>
+        }
+      </ul>
+      <app-pagination
+        [page]="state.value.page"
+        [pageSize]="pageSize"
+        [total]="state.value.total"
+        (pageChange)="goToPage($event)"
+      />
+    }
+  }
+}

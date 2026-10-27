@@ -52,6 +52,12 @@ export function toPageNumber(value: string | undefined): number {
 
     :host {
       justify-content: space-between;
+      font-size: var(--text-sm);
+    }
+
+    span {
+      color: var(--color-text-muted);
+      font-variant-numeric: tabular-nums;
     }
   `,
 })

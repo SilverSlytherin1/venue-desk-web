@@ -1,0 +1,92 @@
+<header class="page-header">
+  <div>
+    <p class="eyebrow">Programme</p>
+    <h1>Events</h1>
+    <p>How full each evening is, and who booked.</p>
+  </div>
+  <nav class="segmented" aria-label="Which events">
+    <a routerLink="." [queryParams]="{}" [attr.aria-current]="when() === 'upcoming' ? 'page' : null"
+      >Upcoming</a
+    >
+    <a
+      routerLink="."
+      [queryParams]="{ when: 'past' }"
+      [attr.aria-current]="when() === 'past' ? 'page' : null"
+      >Past</a
+    >
+  </nav>
+</header>
+
+@let state = events.state();
+@switch (state.status) {
+  @case ('loading') {
+    <app-skeleton label="Loading events" [lines]="5" />
+  }
+  @case ('error') {
+    <app-error-state
+      heading="The events could not be loaded"
+      [problem]="state.problem"
+      (retry)="events.reload()"
+    />
+  }
+  @case ('ready') {
+    @if (state.value.total === 0) {
+      <app-empty-state [heading]="when() === 'past' ? 'No past events' : 'No upcoming events'">
+        <p>Events appear here once they are created.</p>
+      </app-empty-state>
+    } @else {
+      <div class="table-card">
+        <table class="data-table" role="table">
+          <caption class="visually-hidden">
+            {{
+              when() === 'past' ? 'Past events' : 'Upcoming events'
+            }}
+          </caption>
+          <thead role="rowgroup">
+            <tr role="row">
+              <th role="columnheader" scope="col">Event</th>
+              <th role="columnheader" scope="col">Date</th>
+              <th role="columnheader" scope="col">Room</th>
+              <th role="columnheader" scope="col">Booked</th>
+            </tr>
+          </thead>
+          <tbody role="rowgroup">
+            @for (event of state.value.items; track event.id) {
+              <tr role="row">
+                <th role="rowheader" scope="row">
+                  <a class="event-link" [routerLink]="['/staff/events', event.id]">
+                    {{ event.title }}
+                  </a>
+                </th>
+                <td role="cell" data-label="Date">
+                  <time [attr.datetime]="event.startsAt">{{ event.startsAt | venueDate }}</time>
+                </td>
+                <td role="cell" data-label="Room">{{ event.venue }}</td>
+                <td role="cell" data-label="Booked">
+                  <div class="fill">
+                    <span>
+                      {{ event.seatsTaken }} of {{ event.capacity }}
+                      <span class="muted">({{ fill(event) | percent }})</span>
+                    </span>
+                    <div
+                      class="meter"
+                      aria-hidden="true"
+                      [attr.data-level]="event.seatsLeft === 0 ? 'full' : null"
+                      [style.--fill]="fill(event)"
+                    ></div>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <app-pagination
+        [page]="state.value.page"
+        [pageSize]="pageSize"
+        [total]="state.value.total"
+        (pageChange)="goToPage($event)"
+      />
+    }
+  }
+}

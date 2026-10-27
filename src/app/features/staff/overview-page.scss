@@ -1,0 +1,159 @@
+:host {
+  display: grid;
+  gap: var(--space-8);
+}
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+  gap: var(--space-4);
+}
+
+.tile {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+
+  dt {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+
+    app-icon {
+      color: var(--color-brass-text);
+    }
+  }
+
+  .value {
+    color: var(--color-heading);
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: var(--weight-semibold);
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .of {
+    margin-inline-start: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
+  }
+
+  .sub {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+  }
+}
+
+// The estimate stands out on the stage colours: it is the figure an owner remembers.
+.highlight {
+  border-color: var(--color-stage);
+  background:
+    radial-gradient(
+      ellipse 80% 100% at 100% 0%,
+      color-mix(in srgb, var(--color-stage-accent) 22%, transparent),
+      transparent 70%
+    ),
+    var(--color-stage);
+
+  dt,
+  .sub {
+    color: var(--color-on-stage-muted);
+  }
+
+  dt app-icon {
+    color: var(--color-stage-accent);
+  }
+
+  .value {
+    color: var(--color-on-stage);
+  }
+}
+
+.panels {
+  display: grid;
+  gap: var(--space-6);
+
+  @media (min-width: 64rem) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+.panel {
+  display: grid;
+  align-content: start;
+  gap: var(--space-5);
+}
+
+.events,
+.quotes {
+  display: grid;
+
+  li {
+    display: grid;
+    gap: var(--space-2);
+    padding-block: var(--space-4);
+
+    & + li {
+      border-block-start: 1px solid var(--color-border);
+    }
+
+    &:first-child {
+      padding-block-start: 0;
+    }
+  }
+}
+
+.event-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+
+  a {
+    color: var(--color-heading);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+
+    @media (hover: hover) {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  span {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.small {
+  font-size: var(--text-sm);
+}
+
+blockquote {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  line-height: 1.4;
+
+  &::before {
+    content: '\201C';
+  }
+
+  &::after {
+    content: '\201D';
+  }
+}

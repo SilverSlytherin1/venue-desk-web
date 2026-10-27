@@ -3,15 +3,16 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { API_BASE_URL } from './api-base-url';
-import { Booking, BookingRequest, Page, VenueEvent } from './models';
+import { Booking, BookingRequest, EventWhen, Page, VenueEvent } from './models';
 
 @Injectable({ providedIn: 'root' })
 export class EventsApi {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${inject(API_BASE_URL)}/events`;
 
-  list(page: number, pageSize: number): Observable<Page<VenueEvent>> {
-    return this.http.get<Page<VenueEvent>>(this.baseUrl, { params: { page, pageSize } });
+  /** Upcoming events come soonest first, past ones newest first. */
+  list(page: number, pageSize: number, when: EventWhen = 'upcoming'): Observable<Page<VenueEvent>> {
+    return this.http.get<Page<VenueEvent>>(this.baseUrl, { params: { page, pageSize, when } });
   }
 
   get(id: string): Observable<VenueEvent> {

@@ -6,8 +6,8 @@ describe('Booking seats', () => {
   const UUID_V4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 
   function fillInBooking(seats: number): void {
-    cy.findByRole('textbox', { name: 'Full name' }).type('Ada Lovelace');
-    cy.findByRole('textbox', { name: 'Email' }).type('ada@example.com');
+    cy.findByRole('textbox', { name: 'Full name' }).type('Lena Varga');
+    cy.findByRole('textbox', { name: 'Email' }).type('lena@example.com');
     cy.findByRole('spinbutton', { name: 'Seats' }).type(`{selectall}${seats}`);
   }
 
@@ -31,8 +31,8 @@ describe('Booking seats', () => {
 
     cy.wait('@booking').then(({ request }) => {
       expect(request.body).to.deep.equal({
-        name: 'Ada Lovelace',
-        email: 'ada@example.com',
+        name: 'Lena Varga',
+        email: 'lena@example.com',
         seats: 2,
       });
       expect(request.headers['idempotency-key']).to.match(UUID_V4);
@@ -40,7 +40,17 @@ describe('Booking seats', () => {
     cy.location('pathname').should('match', /\/booked$/);
     cy.findByRole('heading', { level: 1, name: 'Booking confirmed' }).should('be.visible');
     cy.findByText('VD-7K2Q9X').should('be.visible');
-    cy.findByText('2 seats booked for Ada Lovelace (ada@example.com).').should('be.visible');
+    cy.findByText('2 seats booked for Lena Varga (lena@example.com).').should('be.visible');
+    // What happens next comes from the messages the API scheduled for this booking.
+    cy.findByRole('region', { name: 'What happens next' })
+      .findAllByRole('heading', { level: 3 })
+      .then((steps) => {
+        expect([...steps].map((step) => step.textContent.trim())).to.deep.equal([
+          'Confirmation sent',
+          'Reminder on Wed 13 Nov',
+          'Feedback request on Fri 15 Nov',
+        ]);
+      });
 
     // The booking travels in the history entry, so it survives a reload. Typing the address
     // carries no booking, and the page does not pretend otherwise.
@@ -72,7 +82,7 @@ describe('Booking seats', () => {
     cy.wait(['@booking', '@refresh']);
     cy.findByRole('alert').should('contain.text', 'only 1 seat left');
     cy.findByText('1 seat left of 120').should('be.visible');
-    cy.findByRole('textbox', { name: 'Full name' }).should('have.value', 'Ada Lovelace');
+    cy.findByRole('textbox', { name: 'Full name' }).should('have.value', 'Lena Varga');
     cy.location('pathname').should('not.include', '/booked');
   });
 });

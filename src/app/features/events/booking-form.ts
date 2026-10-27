@@ -39,7 +39,7 @@ import { MAX_SEATS_PER_BOOKING, seatCount } from './availability';
     }
 
     button {
-      justify-self: start;
+      margin-block-start: var(--space-2);
     }
   `,
 })

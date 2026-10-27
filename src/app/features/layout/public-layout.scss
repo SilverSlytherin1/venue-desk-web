@@ -1,0 +1,122 @@
+:host {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto;
+  min-height: 100dvh;
+}
+
+.site-header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 5;
+  border-block-end: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-canvas) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: 4rem;
+}
+
+.brand {
+  color: var(--color-heading);
+  text-decoration: none;
+
+  app-brand {
+    font-size: var(--text-lg);
+  }
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2) var(--space-5);
+
+  a:not(.button) {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--control-height);
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    text-decoration: none;
+
+    @media (hover: hover) {
+      &:hover {
+        color: var(--color-text);
+      }
+    }
+  }
+
+  .active {
+    color: var(--color-text);
+    box-shadow: inset 0 -2px 0 var(--color-brass);
+  }
+}
+
+main {
+  min-width: 0;
+  padding-block-end: var(--space-16);
+
+  // Focused by the skip link only as a starting point for the next Tab.
+  &:focus {
+    outline: none;
+  }
+}
+
+.site-footer {
+  padding-block: var(--space-10);
+  background: var(--color-stage);
+  color: var(--color-on-stage-muted);
+  font-size: var(--text-sm);
+
+  app-brand {
+    color: var(--color-on-stage);
+    font-size: var(--text-lg);
+  }
+
+  a {
+    color: var(--color-on-stage);
+    text-decoration: none;
+
+    @media (hover: hover) {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.footer-grid {
+  display: grid;
+  gap: var(--space-6) var(--space-12);
+
+  @media (min-width: 48rem) {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
+
+  ul {
+    display: grid;
+    gap: var(--space-2);
+    padding: 0;
+    list-style: none;
+  }
+}
+
+.about {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 34rem;
+}
+
+.small {
+  grid-column: 1 / -1;
+  padding-block-start: var(--space-6);
+  border-block-start: 1px solid var(--color-stage-border);
+  color: var(--color-on-stage-muted);
+  font-size: var(--text-xs);
+}

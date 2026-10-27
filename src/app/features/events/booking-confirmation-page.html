@@ -1,35 +1,47 @@
-<h1>Booking confirmed</h1>
+<div class="container layout">
+  <section class="ticket card" aria-labelledby="confirmed-heading">
+    <span class="seal" aria-hidden="true"><app-icon name="check" /></span>
+    <p class="eyebrow">You are all set</p>
+    <h1 id="confirmed-heading">Booking confirmed</h1>
 
-<div class="reference">
-  <dl>
-    <dt class="muted">Your booking reference</dt>
-    <dd class="code">{{ booking().reference }}</dd>
-  </dl>
-  <p>{{ seats() }} booked for {{ booking().name }} ({{ booking().email }}).</p>
-  <p class="muted">Keep the reference: the venue will ask for it if you contact them.</p>
+    <dl class="reference-block">
+      <dt>Your booking reference</dt>
+      <dd class="code">{{ booking().reference }}</dd>
+    </dl>
+    <p class="summary">{{ seats() }} booked for {{ booking().name }} ({{ booking().email }}).</p>
+    <p class="muted">Keep the reference: the venue will ask for it if you contact them.</p>
+
+    <div class="event">
+      @let state = event.state();
+      @switch (state.status) {
+        @case ('loading') {
+          <app-skeleton label="Loading event details" [lines]="1" />
+        }
+        @case ('error') {
+          <app-error-state
+            heading="Your booking is confirmed, but the event details could not be loaded"
+            [problem]="state.problem"
+            (retry)="event.reload()"
+          />
+        }
+        @case ('ready') {
+          <section aria-labelledby="event-heading">
+            <h2 id="event-heading">{{ state.value.title }}</h2>
+            <p class="muted">
+              <time [attr.datetime]="state.value.startsAt">{{
+                state.value.startsAt | venueDate
+              }}</time
+              >, {{ state.value.venue }}
+            </p>
+          </section>
+        }
+      }
+    </div>
+  </section>
+
+  <section class="next card" aria-labelledby="next-heading">
+    <h2 id="next-heading">What happens next</h2>
+    <app-booking-timeline [messages]="booking().messages" />
+    <a class="button" routerLink="/">Back to all events</a>
+  </section>
 </div>
-
-@let state = event.state();
-@switch (state.status) {
-  @case ('loading') {
-    <app-skeleton label="Loading event details" [lines]="1" />
-  }
-  @case ('error') {
-    <app-error-state
-      heading="Your booking is confirmed, but the event details could not be loaded"
-      [problem]="state.problem"
-      (retry)="event.reload()"
-    />
-  }
-  @case ('ready') {
-    <section aria-labelledby="event-heading">
-      <h2 id="event-heading">{{ state.value.title }}</h2>
-      <p class="muted">
-        <time [attr.datetime]="state.value.startsAt">{{ state.value.startsAt | date }}</time
-        >, {{ state.value.venue }}
-      </p>
-    </section>
-  }
-}
-
-<a class="button" routerLink="/events">Back to all events</a>

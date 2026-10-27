@@ -1,0 +1,51 @@
+<header class="site-header">
+  <div class="container bar">
+    <a class="brand" routerLink="/" aria-label="Venue Desk, home"><app-brand /></a>
+
+    <nav aria-label="Main">
+      <ul class="links">
+        <li>
+          <a
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            ariaCurrentWhenActive="page"
+            >Events</a
+          >
+        </li>
+        <li>
+          @if (user()) {
+            <a class="button button--small" routerLink="/staff">Staff area</a>
+          } @else {
+            <a class="button button--small" routerLink="/staff/login">Staff sign in</a>
+          }
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main tabindex="-1">
+  <router-outlet />
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="about">
+      <app-brand />
+      <p>
+        An evening venue with a small team. Book up to four seats, get a reminder the day before,
+        and tell us how it went.
+      </p>
+    </div>
+    <nav aria-label="Footer">
+      <ul>
+        <li><a routerLink="/">Upcoming events</a></li>
+        <li><a routerLink="/staff">For the venue team</a></li>
+      </ul>
+    </nav>
+    <p class="small">
+      Venue Desk {{ year }}. A demo venue: no payments, and messages are not sent.
+    </p>
+  </div>
+</footer>

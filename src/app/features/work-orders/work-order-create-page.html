@@ -33,7 +33,7 @@
       @if (eventOptions.status === 'ready') {
         @for (event of eventOptions.value.items; track event.id) {
           <option [value]="event.id">
-            {{ event.title }}, {{ event.startsAt | date: 'd MMM y' }}
+            {{ event.title }}, {{ event.startsAt | venueDate: 'd MMM y' }}
           </option>
         }
       }

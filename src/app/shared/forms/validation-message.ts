@@ -23,6 +23,10 @@ export function validationMessage(errors: ValidationErrors, label: string): stri
   if ('wholeNumber' in errors) return `${label} must be a whole number.`;
   if ('min' in errors) return `${label} must be ${(errors['min'] as { min: number }).min} or more.`;
   if ('max' in errors) return `${label} must be ${(errors['max'] as { max: number }).max} or less.`;
+  if ('maxlength' in errors) {
+    const { requiredLength } = errors['maxlength'] as { requiredLength: number };
+    return `${label} must be ${requiredLength} characters or fewer.`;
+  }
 
   return `${label} is not valid.`;
 }

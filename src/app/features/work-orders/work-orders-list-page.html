@@ -1,11 +1,15 @@
 <header class="page-header">
-  <h1>Work orders</h1>
+  <div>
+    <p class="eyebrow">Behind the scenes</p>
+    <h1>Work orders</h1>
+    <p>What has to be ready before each event, who is on it, and how far it got.</p>
+  </div>
   @if (isAdmin()) {
     <a class="button button--primary" routerLink="new">New work order</a>
   }
 </header>
 
-@if (wasRefused) {
+@if (wasRefused()) {
   <app-alert tone="warning">
     That page is for admins only, so you were brought back to the work orders.
   </app-alert>

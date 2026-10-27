@@ -1,0 +1,17 @@
+{
+  "items": [
+    {
+      "id": "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f10",
+      "title": "Blues at the Bar",
+      "description": "A night of electric blues.",
+      "venue": "Main Hall",
+      "startsAt": "2030-10-01T19:00:00.000Z",
+      "capacity": 100,
+      "seatsTaken": 88,
+      "seatsLeft": 12
+    }
+  ],
+  "page": 1,
+  "pageSize": 10,
+  "total": 1
+}
